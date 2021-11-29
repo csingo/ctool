@@ -6,5 +6,5 @@ import (
 )
 
 func initCommand() {
-	cServer.Inject(&AppCommand.TestCommand{})
+	cServer.Inject(&AppCommand.ProjectCommand{})
 }

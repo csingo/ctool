@@ -2,10 +2,10 @@ package cServer
 
 import (
 	"context"
-	"gitee.com/csingo/ctool/core/cConfig"
-	"gitee.com/csingo/ctool/core/cHelper"
-	"gitee.com/csingo/ctool/core/cMiddleware"
-	"gitee.com/csingo/ctool/core/cRpc"
+	"##PROJECT##/core/cConfig"
+	"##PROJECT##/core/cHelper"
+	"##PROJECT##/core/cMiddleware"
+	"##PROJECT##/core/cRpc"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

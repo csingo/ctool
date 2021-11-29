@@ -1,8 +1,8 @@
 package cCommand
 
 import (
-	"gitee.com/csingo/ctool/core/cConfig"
-	"gitee.com/csingo/ctool/core/cHelper"
+	"##PROJECT##/core/cConfig"
+	"##PROJECT##/core/cHelper"
 	"log"
 	"reflect"
 	"strings"

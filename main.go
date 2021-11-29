@@ -5,12 +5,8 @@ import (
 	"gitee.com/csingo/ctool/core/cCommand"
 )
 
-const (
-	VERSION = "v0.0.2"
-)
-
 func main() {
 	autoload.Init()
 
-	cCommand.Run("test::hello", "--name=cxy")
+	cCommand.Run("project::create", "--name=cxy", "--path=.")
 }

@@ -1,7 +1,7 @@
 package cConfig
 
 import (
-	"gitee.com/csingo/ctool/core/cHelper"
+	"##PROJECT##/core/cHelper"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/vo"

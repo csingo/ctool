@@ -1,8 +1,7 @@
 package typs
 
 type ToolConf struct {
-	CopyFiles    []string
-	RewiteParams []string
+	Version string
 }
 
 func (i *ToolConf) ConfigName() string {

@@ -2,7 +2,7 @@ package cHelper
 
 import (
 	"fmt"
-	"gitee.com/csingo/ctool/core/cHelper/constants/randomType"
+	"##PROJECT##/core/cHelper/constants/randomType"
 	"math/rand"
 	"strconv"
 )

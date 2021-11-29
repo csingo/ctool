@@ -1,10 +1,10 @@
 package cServer
 
 import (
-	"gitee.com/csingo/ctool/core/cCommand"
-	"gitee.com/csingo/ctool/core/cConfig"
-	"gitee.com/csingo/ctool/core/cMiddleware"
-	"gitee.com/csingo/ctool/core/cRpc"
+	"##PROJECT##/core/cCommand"
+	"##PROJECT##/core/cConfig"
+	"##PROJECT##/core/cMiddleware"
+	"##PROJECT##/core/cRpc"
 	"os"
 	"os/signal"
 	"reflect"

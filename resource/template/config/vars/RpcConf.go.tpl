@@ -1,7 +1,7 @@
 package vars
 
 import (
-	"gitee.com/csingo/ctool/config/typs"
+	"##PROJECT##/config/typs"
 )
 
 var RpcConf = &typs.RpcConf{
