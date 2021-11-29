@@ -30,10 +30,9 @@ func (i *ProjectCommand) Help() *cCommand.CommandHelpDoc {
 }
 
 func (i *ProjectCommand) Create(name cCommand.Option) {
-	// 读取配置
 
 	// 获取创建项目的路径
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	dir, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -89,10 +88,10 @@ func (i *ProjectCommand) Create(name cCommand.Option) {
 		log.Fatal(err)
 	}
 
-	err = shell(dir)
-	if err != nil {
-		log.Fatal(err)
-	}
+	//err = shell(dir)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
 }
 
 func shell(dir string) error {
