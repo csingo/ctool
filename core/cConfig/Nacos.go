@@ -19,11 +19,11 @@ func initNacos() {
 	path, err7 := GetConf("ConfigCenterConf.Channels.Nacos.Client.Path")
 	if err1 != nil || err2 != nil || err3 != nil || err4 != nil || err5 != nil || err6 != nil || err7 != nil {
 		log.Printf("init nacos err : %+v", []error{err1, err2, err3, err4, err5, err6, err7})
-		ConfigContainer.ConfigCenter.Enable = false
+		configContainer.configCenter.enable = false
 		return
 	}
 	var err error
-	ConfigContainer.ConfigCenter.NacosClient, err = clients.NewConfigClient(vo.NacosClientParam{
+	configContainer.configCenter.nacosClient, err = clients.NewConfigClient(vo.NacosClientParam{
 		ClientConfig: &constant.ClientConfig{
 			NamespaceId:          namespace.(string),
 			UpdateThreadNum:      0,
@@ -43,7 +43,7 @@ func initNacos() {
 	})
 	if err != nil {
 		log.Printf("create nacos client error : %+v", err)
-		ConfigContainer.ConfigCenter.Enable = false
+		configContainer.configCenter.enable = false
 		return
 	}
 
@@ -62,13 +62,13 @@ func initNacos() {
 			if errG != nil || errD != nil {
 				continue
 			}
-			ConfigContainer.ConfigCenter.Listeners[data.(string)] = group.(string)
+			configContainer.configCenter.listeners[data.(string)] = group.(string)
 		}
 	}
 }
 
 func readNacos(data, group string) ([]byte, error) {
-	content, err := ConfigContainer.ConfigCenter.NacosClient.GetConfig(vo.ConfigParam{
+	content, err := configContainer.configCenter.nacosClient.GetConfig(vo.ConfigParam{
 		DataId: data,
 		Group:  group,
 	})

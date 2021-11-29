@@ -1,8 +1,6 @@
 package command
 
 import (
-	"context"
-	"framework/base/app"
 	"framework/core/cCommand"
 	"log"
 )
@@ -13,7 +11,7 @@ func (i *TestCommand) Help() *cCommand.CommandHelpDoc {
 	return &cCommand.CommandHelpDoc{
 		CommandDesc: cCommand.CommandDesc{Name: "test", Desc: "测试"},
 		MethodDesc: []cCommand.MethodDesc{
-			{Name: "app", Desc: "你好", Options: []string{"name"}},
+			{Name: "hello", Desc: "你好", Options: []string{"name"}},
 			{Name: "test", Desc: "生成手机号", Options: []string{"name"}},
 		},
 		OptionDesc: []cCommand.OptionDesc{
@@ -23,8 +21,8 @@ func (i *TestCommand) Help() *cCommand.CommandHelpDoc {
 }
 
 func (i *TestCommand) Hello(name cCommand.Option) {
-	app.HelloService.Say(context.Background(), nil)
-	log.Printf("app %s", name.Value)
+	//app.HelloService.Say(context.Background(), nil)
+	log.Printf("hello %s", name.Value)
 }
 
 func (i *TestCommand) Test() {

@@ -18,13 +18,13 @@ func Inject(instance interface{}) {
 	doc := instance.(CommandInterface).Help()
 	instanceName := doc.CommandDesc.Name
 	instanceMethods := doc.MethodDesc
-	CommandContainer.Instances[instanceName] = instance
+	CommandContainer.instances[instanceName] = instance
 
 	var labels []string
 	for _, method := range instanceMethods {
 		labels = append(labels, instanceName+"::"+method.Name)
 	}
-	CommandContainer.Labels = append(CommandContainer.Labels, labels...)
+	CommandContainer.labels = append(CommandContainer.labels, labels...)
 }
 
 // Load 初始化加载
@@ -41,11 +41,11 @@ func IsCommand(o interface{}) bool {
 
 // Run 执行command
 func Run(label string, options ...string) {
-	if !cHelper.InArrayString(label, CommandContainer.Labels) {
+	if !cHelper.InArrayString(label, CommandContainer.labels) {
 		log.Printf("cCommand not found: %s %v", label, options)
 		return
 	}
-	if !state.Enable {
+	if !state.enable {
 		return
 	}
 
@@ -56,7 +56,7 @@ func Run(label string, options ...string) {
 	commandName := labels[0]
 	methodName := labels[1]
 
-	instance := CommandContainer.Instances[commandName]
+	instance := CommandContainer.instances[commandName]
 	instanceDoc := instance.(CommandInterface).Help()
 	methods := instanceDoc.MethodDesc
 	var optionNames []string
@@ -108,7 +108,7 @@ func exec(argv *CommandArgvs) {
 	}
 
 	// 添加并发锁控制，生成任务uuid(纳秒+序号)， 更新任务
-	state.Lock.Lock()
+	state.lock.Lock()
 	var uuid string
 	var count int
 	now := time.Now()
@@ -116,22 +116,22 @@ func exec(argv *CommandArgvs) {
 	ns := now.Nanosecond()
 	for count = 0; count <= 999; count++ {
 		uuid = cHelper.ToString(t) + "-" + cHelper.ToString(ns) + "-" + cHelper.ToString(count)
-		if _, ok := state.Running[uuid]; !ok {
-			state.Running[uuid] = argv.Name
+		if _, ok := state.running[uuid]; !ok {
+			state.running[uuid] = argv.Name
 			break
 		}
 	}
-	state.Lock.Unlock()
+	state.lock.Unlock()
 
 	defer func(uuid string) {
 		if r := recover(); r != nil {
-			log.Printf("cCommand exec error: %s", state.Running[uuid])
+			log.Printf("cCommand exec error: %s", state.running[uuid])
 		}
 
 		// cCommand 执行完成，删除uuid
-		state.Lock.Lock()
-		delete(state.Running, uuid)
-		state.Lock.Unlock()
+		state.lock.Lock()
+		delete(state.running, uuid)
+		state.lock.Unlock()
 	}(uuid)
 
 	// 执行command
@@ -156,11 +156,11 @@ func StartCron() {
 				Run(argvCommand, argvOptions...)
 			}
 
-			state.Cron.AddFunc(argvCrond, cronFunc)
+			state.cron.AddFunc(argvCrond, cronFunc)
 		}
 	}
 	// 启动定时任务
-	state.Cron.Start()
+	state.cron.Start()
 
 }
 
@@ -188,5 +188,5 @@ func StartResident() {
 }
 
 func StopCron() {
-	state.Cron.Stop()
+	state.cron.Stop()
 }

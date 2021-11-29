@@ -17,10 +17,10 @@ import (
 
 // StopHTTP 停止http服务
 func StopHTTP() {
-	if state.HTTPServer != nil {
-		ctx, cancel := context.WithTimeout(context.Background(), state.Timeout)
+	if state.httpServer != nil {
+		ctx, cancel := context.WithTimeout(context.Background(), state.timeout)
 		defer cancel()
-		state.HTTPServer.Shutdown(ctx)
+		state.httpServer.Shutdown(ctx)
 	}
 }
 
@@ -108,8 +108,8 @@ func StartHTTP() {
 		MaxHeaderBytes: 1 << maxHeaderBytes.(int),
 	}
 
-	state.HTTPServer = s
-	state.Timeout = time.Duration(exitTimeout.(int)) * time.Second
+	state.httpServer = s
+	state.timeout = time.Duration(exitTimeout.(int)) * time.Second
 
 	// 启动 HTTP 服务
 	s.ListenAndServe()
@@ -187,7 +187,7 @@ func parseRoute(conf interface{}, router *gin.RouterGroup) {
 		// 定义控制器路由处理
 		var controllerHandler gin.HandlerFunc
 		controllerHandler = func(c *gin.Context) {
-			state.HTTPConnCounter++
+			state.httpConnCounter++
 			results := controllerMethod.Call([]reflect.Value{
 				reflect.ValueOf(c),
 			})
@@ -196,7 +196,7 @@ func parseRoute(conf interface{}, router *gin.RouterGroup) {
 				result := results[1].Interface()
 				c.JSON(httpCode, result)
 			}
-			state.HTTPConnCounter--
+			state.httpConnCounter--
 		}
 
 		// 路由处理方法-前置中间件

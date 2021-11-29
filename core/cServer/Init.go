@@ -15,7 +15,7 @@ func Inject(instance interface{}) {
 	name := reflect.TypeOf(instance).Elem().Name()
 	path := reflect.TypeOf(instance).Elem().PkgPath()
 	index := path + "/" + name
-	ServerContainer.Instances[index] = instance
+	serverContainer.instances[index] = instance
 
 	cConfig.Inject(instance)
 	cCommand.Inject(instance)
@@ -32,8 +32,8 @@ func Instance(name string) interface{} {
 		name = mod.(string) + "/" + name
 	}
 
-	if _, ok := ServerContainer.Instances[name]; ok {
-		return ServerContainer.Instances[name]
+	if _, ok := serverContainer.instances[name]; ok {
+		return serverContainer.instances[name]
 	}
 
 	return nil
@@ -49,7 +49,7 @@ func Init() {
 	cCommand.Load()
 	Load()
 
-	cCommand.SetSysExitChannel(App.Exit)
+	cCommand.SetSysExitChannel(app.exit)
 
 	// 启动服务
 	go StartHTTP()
@@ -57,17 +57,17 @@ func Init() {
 
 func Start() {
 	// 系统信号监听
-	signal.Notify(App.Signal, os.Interrupt, os.Kill, syscall.SIGTERM)
+	signal.Notify(app.signal, os.Interrupt, os.Kill, syscall.SIGTERM)
 	// 进程常驻
 	for {
 		select {
-		case <-App.Signal:
-			App.ExitCounter = App.ExitCounter + 2
+		case <-app.signal:
+			app.exitCounter = app.exitCounter + 2
 			Exit()
 			cCommand.Exit()
-		case exit := <-App.Exit:
-			App.ExitCounter--
-			if exit && App.ExitCounter == 0 {
+		case exit := <-app.exit:
+			app.exitCounter--
+			if exit && app.exitCounter == 0 {
 				os.Exit(0)
 			}
 		}

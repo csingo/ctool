@@ -7,47 +7,47 @@ import (
 )
 
 type container struct {
-	Instances map[string]interface{}
+	instances map[string]interface{}
 }
 
-var ServerContainer = &container{
-	Instances: make(map[string]interface{}),
+var serverContainer = &container{
+	instances: make(map[string]interface{}),
 }
 
 type application struct {
-	Signal        chan os.Signal
-	Exit          chan bool
-	ExitCounter   uint
-	EnableHTTP    chan bool
-	EnableTCP     chan bool
-	EnableCommand chan bool
-	EnableConfig  chan bool
+	signal        chan os.Signal
+	exit          chan bool
+	exitCounter   uint
+	enableHTTP    chan bool
+	enableTCP     chan bool
+	enableCommand chan bool
+	enableConfig  chan bool
 }
 
-var App = &application{
-	Signal:        make(chan os.Signal),
-	Exit:          make(chan bool),
-	ExitCounter:   0,
-	EnableHTTP:    make(chan bool),
-	EnableTCP:     make(chan bool),
-	EnableCommand: make(chan bool),
-	EnableConfig:  make(chan bool),
+var app = &application{
+	signal:        make(chan os.Signal),
+	exit:          make(chan bool),
+	exitCounter:   0,
+	enableHTTP:    make(chan bool),
+	enableTCP:     make(chan bool),
+	enableCommand: make(chan bool),
+	enableConfig:  make(chan bool),
 }
 
-type ServerState struct {
-	Enable          bool
-	ExitChannel     chan bool
-	HTTPConnCounter int
-	HTTPServer      *http.Server
-	Timeout         time.Duration
+type serverState struct {
+	enable          bool
+	exitChannel     chan bool
+	httpConnCounter int
+	httpServer      *http.Server
+	timeout         time.Duration
 }
 
-var state = &ServerState{
-	Enable:          true,
-	ExitChannel:     make(chan bool),
-	HTTPConnCounter: 0,
-	HTTPServer:      nil,
-	Timeout:         5 * time.Second,
+var state = &serverState{
+	enable:          true,
+	exitChannel:     make(chan bool),
+	httpConnCounter: 0,
+	httpServer:      nil,
+	timeout:         5 * time.Second,
 }
 
 

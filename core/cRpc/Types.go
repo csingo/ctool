@@ -15,9 +15,9 @@ func (s *RpcService) RpcServiceName() (string, string) {
 }
 
 type container struct {
-	Services map[string]RpcServiceInterface
+	services map[string]RpcServiceInterface
 }
 
-var RpcServiceContainer = &container{
-	Services: map[string]RpcServiceInterface{},
+var rpcServiceContainer = &container{
+	services: map[string]RpcServiceInterface{},
 }

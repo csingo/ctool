@@ -5,13 +5,13 @@ func listenExit() {
 	go func() {
 		for {
 			select {
-			case exit := <-state.ExitChannel:
+			case exit := <-state.exitChannel:
 				if exit {
-					state.Enable = false
+					state.enable = false
 					StopCron()
 					// 通知系统退出完成
-					if state.AppExitChannel != nil {
-						state.AppExitChannel <- true
+					if state.appExitChannel != nil {
+						state.appExitChannel <- true
 					}
 				}
 			}
@@ -21,12 +21,12 @@ func listenExit() {
 
 // SetSysExitChannel 设置系统退出信号通道
 func SetSysExitChannel(c chan bool) {
-	state.AppExitChannel = c
+	state.appExitChannel = c
 }
 
 // Exit 发出退出信号
 func Exit() {
 	go func() {
-		state.ExitChannel <- true
+		state.exitChannel <- true
 	}()
 }

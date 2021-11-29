@@ -10,38 +10,38 @@ type ConfigInterface interface {
 }
 
 type container struct {
-	Path           string
-	Instances      map[string]interface{}
-	Versions       map[string]string
-	UpdateInterval int
-	UpdateChannel  chan string
-	UpdateTickers  map[string]*time.Ticker
-	UpdateFunc     map[string][]HandleFunc
-	ConfigCenter   *center
+	path           string
+	instances      map[string]interface{}
+	versions       map[string]string
+	updateInterval int
+	updateChannel  chan string
+	updateTickers  map[string]*time.Ticker
+	updateFunc     map[string][]HandleFunc
+	configCenter   *center
 }
 
 type center struct {
-	Enable      bool
-	Driver      string
-	NacosClient config_client.IConfigClient
-	Listeners   listeners
+	enable      bool
+	driver      string
+	nacosClient config_client.IConfigClient
+	listeners   listeners
 }
 
 type listeners map[string]string
 
 type HandleFunc func()
 
-var ConfigContainer = &container{
-	Path:           "",
-	Instances:      make(map[string]interface{}),
-	Versions:       make(map[string]string),
-	UpdateInterval: 1,
-	UpdateChannel:  make(chan string),
-	UpdateTickers:  make(map[string]*time.Ticker),
-	UpdateFunc:     make(map[string][]HandleFunc),
-	ConfigCenter: &center{
-		Enable:      false,
-		NacosClient: nil,
-		Listeners:   make(listeners),
+var configContainer = &container{
+	path:           "",
+	instances:      make(map[string]interface{}),
+	versions:       make(map[string]string),
+	updateInterval: 1,
+	updateChannel:  make(chan string),
+	updateTickers:  make(map[string]*time.Ticker),
+	updateFunc:     make(map[string][]HandleFunc),
+	configCenter: 	&center{
+		enable:      false,
+		nacosClient: nil,
+		listeners:   make(listeners),
 	},
 }

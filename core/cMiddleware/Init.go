@@ -16,8 +16,8 @@ func Inject(instance interface{}) {
 		instance.(MiddlewareInterface).Handler(c)
 	}
 
-	MiddlewareContainer.Instances[name] = instance
-	MiddlewareContainer.HandlerFuncs[name] = function
+	middlewareContainer.instances[name] = instance
+	middlewareContainer.iandlerFuncs[name] = function
 }
 
 func IsMiddleware(o interface{}) bool {
@@ -25,9 +25,9 @@ func IsMiddleware(o interface{}) bool {
 }
 
 func GetMiddleware(name string) gin.HandlerFunc {
-	if _, ok := MiddlewareContainer.HandlerFuncs[name]; !ok {
+	if _, ok := middlewareContainer.iandlerFuncs[name]; !ok {
 		return nil
 	}
 
-	return MiddlewareContainer.HandlerFuncs[name]
+	return middlewareContainer.iandlerFuncs[name]
 }

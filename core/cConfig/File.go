@@ -16,5 +16,5 @@ func initLocalFile() {
 	}
 	path = strings.TrimRight(path, "/")
 	path = strings.TrimRight(path, "\\")
-	ConfigContainer.Path = path
+	configContainer.path = path
 }

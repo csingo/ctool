@@ -19,8 +19,8 @@ func Inject(instance interface{}) {
 		return
 	}
 	name := instance.(ConfigInterface).ConfigName()
-	ConfigContainer.Instances[name] = instance
-	ConfigContainer.Versions[name] = "0"
+	configContainer.instances[name] = instance
+	configContainer.versions[name] = "0"
 }
 
 // Load 加载配置文件
@@ -32,7 +32,7 @@ func Load() {
 
 	// 加载配置
 	log.Println("start load cConfig ...")
-	for _, instance := range ConfigContainer.Instances {
+	for _, instance := range configContainer.instances {
 		name := instance.(ConfigInterface).ConfigName()
 		jsonBytes, err := readConf(name)
 		if err != nil {
@@ -45,7 +45,7 @@ func Load() {
 			continue
 		}
 		hex := md5.Sum(jsonBytes)
-		ConfigContainer.Versions[name] = fmt.Sprintf("%x", hex)
+		configContainer.versions[name] = fmt.Sprintf("%x", hex)
 		// 添加配置监听器
 		//ListenConf([]string{name}, nil)
 	}
@@ -58,8 +58,8 @@ func GetConf(name string) (interface{}, error) {
 	indexArr := strings.Split(name, ".")
 	indexLen := len(indexArr)
 
-	if _, ok := ConfigContainer.Instances[indexArr[0]]; ok {
-		conf = ConfigContainer.Instances[indexArr[0]]
+	if _, ok := configContainer.instances[indexArr[0]]; ok {
+		conf = configContainer.instances[indexArr[0]]
 	} else {
 		return nil, errors.New("cConfig not fount")
 	}
@@ -94,18 +94,18 @@ func IsConf(instance interface{}) bool {
 
 // ListenConf 添加配置监听器
 func ListenConf(confs []string, handler HandleFunc) {
-	interval := ConfigContainer.UpdateInterval
+	interval := configContainer.updateInterval
 	for _, conf := range confs {
-		if _, ok := ConfigContainer.Instances[conf]; ok {
+		if _, ok := configContainer.instances[conf]; ok {
 			// 添加监听器处理函数
 			if handler != nil {
-				ConfigContainer.UpdateFunc[conf] = append(ConfigContainer.UpdateFunc[conf], handler)
+				configContainer.updateFunc[conf] = append(configContainer.updateFunc[conf], handler)
 			}
 
 			// 监听器不存在则新建
-			if _, tok := ConfigContainer.UpdateTickers[conf]; !tok {
+			if _, tok := configContainer.updateTickers[conf]; !tok {
 				ticker := time.NewTicker(time.Duration(interval) * time.Second)
-				ConfigContainer.UpdateTickers[conf] = ticker
+				configContainer.updateTickers[conf] = ticker
 
 				// 启动监听器处理协程
 				log.Printf("start listen cConfig: %s", conf)
@@ -122,16 +122,16 @@ func ListenConf(confs []string, handler HandleFunc) {
 						encode := fmt.Sprintf("%x", hex)
 
 						// 比较版本，不一致时才执行更新
-						if encode != ConfigContainer.Versions[name] {
+						if encode != configContainer.versions[name] {
 							// 更新配置
-							ConfigContainer.Versions[name] = encode
-							instance := ConfigContainer.Instances[name]
+							configContainer.versions[name] = encode
+							instance := configContainer.instances[name]
 							err := json.Unmarshal(jsonBytes, instance)
 							if err != nil {
 								log.Printf("json unmarshal cConfig err: [%s] %+v", name, err)
 							}
 							// 执行监听器函数
-							for _, f := range ConfigContainer.UpdateFunc[name] {
+							for _, f := range configContainer.updateFunc[name] {
 								if f != nil {
 									go func(function func()) {
 										function()
@@ -155,14 +155,14 @@ func ListenConf(confs []string, handler HandleFunc) {
 func readConf(name string) ([]byte, error) {
 	var data []byte
 	var err error
-	if _, ok := ConfigContainer.ConfigCenter.Listeners[name]; ConfigContainer.ConfigCenter.Enable && ok {
-		group := ConfigContainer.ConfigCenter.Listeners[name]
+	if _, ok := configContainer.configCenter.listeners[name]; configContainer.configCenter.enable && ok {
+		group := configContainer.configCenter.listeners[name]
 		data, err = readConfigCenter(name, group)
 		if len(data) <= 0 && err == nil {
 			err = errors.New("cConfig center is empty: " + name)
 		}
 	} else {
-		filePath := ConfigContainer.Path + "/" + name + ".json"
+		filePath := configContainer.path + "/" + name + ".json"
 		data, err = ioutil.ReadFile(filePath)
 		if len(data) <= 0 && err == nil {
 			err = errors.New("file cConfig is empty: " + name)

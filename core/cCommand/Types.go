@@ -54,30 +54,30 @@ type CommandArgvs struct {
 
 // container 容器
 type container struct {
-	Instances map[string]interface{}
-	Labels    []string
+	instances map[string]interface{}
+	labels    []string
 }
 
 var CommandContainer = &container{
-	Instances: make(map[string]interface{}),
-	Labels:    []string{},
+	instances: make(map[string]interface{}),
+	labels:    []string{},
 }
 
 // CommandState command状态
-type CommandState struct {
-	Enable         bool
-	Cron           *cron.Cron
-	ExitChannel    chan bool
-	AppExitChannel chan bool
-	Running        map[string]string // 进行中任务
-	Lock           *sync.Mutex       // map 并发控制
+type commandState struct {
+	enable         bool
+	cron           *cron.Cron
+	exitChannel    chan bool
+	appExitChannel chan bool
+	running        map[string]string // 进行中任务
+	lock           *sync.Mutex       // map 并发控制
 }
 
-var state = &CommandState{
-	Enable:         true,
-	Cron:           cron.New(),
-	ExitChannel:    make(chan bool),
-	AppExitChannel: nil,
-	Running:        map[string]string{},
-	Lock:           &sync.Mutex{},
+var state = &commandState{
+	enable:         true,
+	cron:           cron.New(),
+	exitChannel:    make(chan bool),
+	appExitChannel: nil,
+	running:        map[string]string{},
+	lock:           &sync.Mutex{},
 }

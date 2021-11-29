@@ -7,35 +7,35 @@ func initConfigCenter() {
 	if err != nil {
 		enable = false
 	}
-	ConfigContainer.ConfigCenter.Enable = enable.(bool)
+	configContainer.configCenter.enable = enable.(bool)
 
 	driver, err := GetConf("ConfigCenterConf.Driver")
 	if err != nil {
 		driver = "nacos"
 	}
-	ConfigContainer.ConfigCenter.Driver = driver.(string)
+	configContainer.configCenter.driver = driver.(string)
 
 	interval, err := GetConf("ConfigCenterConf.Interval")
 	if err != nil {
 		interval = 1
 	}
-	ConfigContainer.UpdateInterval = interval.(int)
+	configContainer.updateInterval = interval.(int)
 
-	if ConfigContainer.ConfigCenter.Enable {
-		switch ConfigContainer.ConfigCenter.Driver {
+	if configContainer.configCenter.enable {
+		switch configContainer.configCenter.driver {
 		case "nacos":
 			initNacos()
 			listenConfigCenter()
 		default:
-			log.Printf("cConfig center driver is not used : %+v", ConfigContainer.ConfigCenter.Driver)
-			ConfigContainer.ConfigCenter.Enable = false
+			log.Printf("cConfig center driver is not used : %+v", configContainer.configCenter.driver)
+			configContainer.configCenter.enable = false
 		}
 	}
 }
 
 func listenConfigCenter() {
 	names := []string{}
-	for name, _ := range ConfigContainer.ConfigCenter.Listeners {
+	for name, _ := range configContainer.configCenter.listeners {
 		names = append(names, name)
 	}
 
@@ -45,7 +45,7 @@ func listenConfigCenter() {
 func readConfigCenter(data, group string) ([]byte, error) {
 	var res []byte
 	var err error
-	switch ConfigContainer.ConfigCenter.Driver {
+	switch configContainer.configCenter.driver {
 	default:
 		res = nil
 		err = nil

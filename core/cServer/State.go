@@ -5,13 +5,13 @@ func listenExit() {
 	go func() {
 		for {
 			select {
-			case exit := <-state.ExitChannel:
+			case exit := <-state.exitChannel:
 				if exit {
-					state.Enable = false
+					state.enable = false
 					// 退出Http服务
 					StopHTTP()
 					// 通知系统退出完成
-					App.Exit <- true
+					app.exit <- true
 				}
 			}
 		}
@@ -21,6 +21,6 @@ func listenExit() {
 // Exit 发出退出信号
 func Exit() {
 	go func() {
-		state.ExitChannel <- true
+		state.exitChannel <- true
 	}()
 }

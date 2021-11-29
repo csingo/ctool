@@ -8,11 +8,11 @@ type MiddlewareInterface interface {
 }
 
 type container struct {
-	Instances    map[string]interface{}
-	HandlerFuncs map[string]gin.HandlerFunc
+	instances    map[string]interface{}
+	iandlerFuncs map[string]gin.HandlerFunc
 }
 
-var MiddlewareContainer = &container{
-	Instances:    map[string]interface{}{},
-	HandlerFuncs: map[string]gin.HandlerFunc{},
+var middlewareContainer = &container{
+	instances:    map[string]interface{}{},
+	iandlerFuncs: map[string]gin.HandlerFunc{},
 }
