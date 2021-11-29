@@ -2,11 +2,12 @@ package main
 
 import (
 	"framework/autoload"
-	"framework/core/cCommand"
+	"framework/core/cServer"
 )
 
 func main() {
 	autoload.Init()
-
-	cCommand.Run("test::hello", "--name=cxy")
+	cServer.Init()
+	
+	cServer.Start()
 }

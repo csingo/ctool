@@ -98,7 +98,7 @@ func Run(label string, options ...string) {
 		Name:    command,
 	}
 
-	go exec(argv)
+	exec(argv)
 }
 
 func exec(argv *CommandArgvs) {
@@ -153,7 +153,7 @@ func StartCron() {
 			var argvOptions = options
 
 			var cronFunc = func() {
-				Run(argvCommand, argvOptions...)
+				go Run(argvCommand, argvOptions...)
 			}
 
 			state.cron.AddFunc(argvCrond, cronFunc)
@@ -179,7 +179,7 @@ func StartResident() {
 			var argvOptions = options
 
 			var residentFunc = func() {
-				Run(argvCommand, argvOptions...)
+				go Run(argvCommand, argvOptions...)
 			}
 
 			time.AfterFunc(time.Duration(argvWait)*time.Second, residentFunc)
