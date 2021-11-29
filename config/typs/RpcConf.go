@@ -1,6 +1,6 @@
 package typs
 
-import "framework/core/cRpc"
+import "gitee.com/csingo/ctool/core/cRpc"
 
 type RpcConf struct {
 	ServiceHosts []*RpcConf_ServieHost

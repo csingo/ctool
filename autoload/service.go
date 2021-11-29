@@ -1,8 +1,8 @@
 package autoload
 
 import (
-	AppService "framework/app/service"
-	"framework/core/cServer"
+	AppService "gitee.com/csingo/ctool/app/service"
+	"gitee.com/csingo/ctool/core/cServer"
 )
 
 func initService() {

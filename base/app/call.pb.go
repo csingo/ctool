@@ -3,7 +3,7 @@ package app
 import (
 	"context"
 	"encoding/json"
-	"framework/core/cHTTPClient"
+	"gitee.com/csingo/ctool/core/cHTTPClient"
 )
 
 func call(ctx context.Context, host string, req interface{}, rsp interface{}) (err error) {

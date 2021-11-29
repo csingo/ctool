@@ -1,9 +1,10 @@
 package cServer
 
 import (
-	"framework/core/cCommand"
-	"framework/core/cConfig"
-	"framework/core/cMiddleware"
+	"gitee.com/csingo/ctool/core/cCommand"
+	"gitee.com/csingo/ctool/core/cConfig"
+	"gitee.com/csingo/ctool/core/cMiddleware"
+	"gitee.com/csingo/ctool/core/cRpc"
 	"os"
 	"os/signal"
 	"reflect"
@@ -20,6 +21,7 @@ func Inject(instance interface{}) {
 	cConfig.Inject(instance)
 	cCommand.Inject(instance)
 	cMiddleware.Inject(instance)
+	cRpc.Inject(instance)
 }
 
 // Instance 获取容器内实体

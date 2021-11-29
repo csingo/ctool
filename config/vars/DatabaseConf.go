@@ -1,8 +1,8 @@
 package vars
 
 import (
-	"framework/config/typs"
-	"framework/core/cHelper"
+	"gitee.com/csingo/ctool/config/typs"
+	"gitee.com/csingo/ctool/core/cHelper"
 )
 
 var Database = &typs.DatabaseConf{

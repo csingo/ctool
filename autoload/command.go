@@ -1,8 +1,8 @@
 package autoload
 
 import (
-	AppCommand "framework/app/command"
-	"framework/core/cServer"
+	AppCommand "gitee.com/csingo/ctool/app/command"
+	"gitee.com/csingo/ctool/core/cServer"
 )
 
 func initCommand() {

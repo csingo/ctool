@@ -1,8 +1,8 @@
 package autoload
 
 import (
-	AppController "framework/app/controller"
-	"framework/core/cServer"
+	AppController "gitee.com/csingo/ctool/app/controller"
+	"gitee.com/csingo/ctool/core/cServer"
 )
 
 func initController() {

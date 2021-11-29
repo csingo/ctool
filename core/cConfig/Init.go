@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"framework/core/cHelper"
+	"gitee.com/csingo/ctool/core/cHelper"
 	"io/ioutil"
 	"log"
 	"reflect"

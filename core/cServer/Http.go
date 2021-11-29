@@ -2,11 +2,10 @@ package cServer
 
 import (
 	"context"
-	"encoding/json"
-	"framework/core/cConfig"
-	"framework/core/cHelper"
-	"framework/core/cMiddleware"
-	"framework/core/cRpc"
+	"gitee.com/csingo/ctool/core/cConfig"
+	"gitee.com/csingo/ctool/core/cHelper"
+	"gitee.com/csingo/ctool/core/cMiddleware"
+	"gitee.com/csingo/ctool/core/cRpc"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -69,35 +68,7 @@ func StartHTTP() {
 	dispatch(router)
 
 	// 注册 rpc server
-	router.POST("/rpc/call", func(c *gin.Context) {
-		app := c.Request.Header.Get("Rpc-App")
-		service := c.Request.Header.Get("Rpc-Service")
-		method := c.Request.Header.Get("Rpc-Method")
-
-		serviceInstance, err := cRpc.GetService(app, service)
-		if err != nil {
-			c.String(http.StatusNotFound, err.Error())
-		}
-
-		caller := reflect.ValueOf(serviceInstance).Elem().MethodByName(method)
-		typ := caller.Type().In(0)
-		param := reflect.New(typ)
-
-		var body []byte
-		c.Request.Body.Read(body)
-		err = json.Unmarshal(body, param)
-		if err != nil {
-			c.String(http.StatusBadRequest, err.Error())
-		}
-
-		responseValues := caller.Call([]reflect.Value{reflect.ValueOf(param)})
-		err = responseValues[1].Interface().(error)
-		if err != nil {
-			c.String(http.StatusInternalServerError, err.Error())
-		}
-
-		c.JSON(http.StatusOK, responseValues[0].Interface())
-	})
+	router.POST("/rpc/call", handleRpc)
 
 	// 定义 HTTP 配置
 	s := &http.Server{
@@ -220,4 +191,33 @@ func parseRoute(conf interface{}, router *gin.RouterGroup) {
 		method := reflect.ValueOf(conf).Elem().FieldByName("Method").Interface().(string)
 		reflect.ValueOf(router).MethodByName(method).Call(routeHandlerArgs)
 	}
+}
+
+func handleRpc(c *gin.Context) {
+	rpcApp := c.Request.Header.Get("Rpc-App")
+	rpcService := c.Request.Header.Get("Rpc-Service")
+	rpcMethod := c.Request.Header.Get("Rpc-Method")
+
+	serviceInstance, err := cRpc.GetService(rpcApp, rpcService)
+	if err != nil {
+		c.String(http.StatusNotFound, err.Error())
+	}
+
+	caller := reflect.ValueOf(serviceInstance).MethodByName(rpcMethod)
+	typ := caller.Type().In(1)
+	param := reflect.New(typ)
+
+	jsonCall := reflect.ValueOf(c).MethodByName("BindJSON")
+	jsonRes := jsonCall.Call([]reflect.Value{param})
+	if !jsonRes[0].IsNil() {
+		c.String(http.StatusInternalServerError, jsonRes[0].Interface().(error).Error())
+	}
+
+	responseValues := caller.Call([]reflect.Value{reflect.ValueOf(c), param.Elem()})
+	if !responseValues[1].IsNil() {
+		err = responseValues[1].Interface().(error)
+		c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	c.JSON(http.StatusOK, responseValues[0].Interface())
 }

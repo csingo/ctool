@@ -1,8 +1,8 @@
 package autoload
 
 import (
-	AppMiddleware "framework/app/middleware"
-	"framework/core/cServer"
+	AppMiddleware "gitee.com/csingo/ctool/app/middleware"
+	"gitee.com/csingo/ctool/core/cServer"
 )
 
 func initMiddleware() {

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"framework/autoload"
-	"framework/core/cServer"
+	"gitee.com/csingo/ctool/autoload"
+	"gitee.com/csingo/ctool/core/cServer"
 )
 
 func main() {

@@ -1,7 +1,7 @@
 package command
 
 import (
-	"framework/core/cCommand"
+	"gitee.com/csingo/ctool/core/cCommand"
 	"log"
 )
 

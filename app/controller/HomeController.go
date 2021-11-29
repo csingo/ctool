@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"framework/app/service"
-	"framework/response"
+	"gitee.com/csingo/ctool/app/service"
+	"gitee.com/csingo/ctool/response"
 	"github.com/gin-gonic/gin"
 )
 
