@@ -3,7 +3,7 @@ package vars
 import "gitee.com/csingo/ctool/config/typs"
 
 var Tool = &typs.ToolConf{
-	Version: "v0.0.18",
+	Version: "v0.0.20",
 	WriteFiles: map[string][]string{
 		"project::create": {
 			"/.gitignore.tpl",
