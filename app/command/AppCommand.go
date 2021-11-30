@@ -220,20 +220,20 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 	// 获取模板路径
 	gopath := cHelper.EnvToString("GOPATH", "")
 	tplPath := filepath.Clean(gopath + "/pkg/mod/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
-	//tplServiceFilePath := fmt.Sprintf("%s/base/app/service_http.pb.go.tpl", tplPath)
-	//tplRpcFilePath := fmt.Sprintf("%s/base/app/service_rpc.pb.go.tpl", tplPath)
-	//tplCallFilePath := fmt.Sprintf("%s/base/app/call.pb.go.tpl", tplPath)
+	tplServiceFilePath := fmt.Sprintf("%s/base/app/service_http.pb.go.tpl", tplPath)
+	tplRpcFilePath := fmt.Sprintf("%s/base/app/service_rpc.pb.go.tpl", tplPath)
+	tplCallFilePath := fmt.Sprintf("%s/base/app/call.pb.go.tpl", tplPath)
 	tplAppServiceFilePath := fmt.Sprintf("%s/app/service/Service.go.tpl", tplPath)
 	tplAppServiceRpcFilePath := fmt.Sprintf("%s/app/service/Rpc.go.tpl", tplPath)
 
-	//serviceTplContent, err := ioutil.ReadFile(tplServiceFilePath)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//rpcTplContent, err := ioutil.ReadFile(tplRpcFilePath)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
+	serviceTplContent, err := ioutil.ReadFile(tplServiceFilePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	rpcTplContent, err := ioutil.ReadFile(tplRpcFilePath)
+	if err != nil {
+		log.Fatal(err)
+	}
 	appServiceTplContent, err := ioutil.ReadFile(tplAppServiceFilePath)
 	if err != nil {
 		log.Fatal(err)
@@ -243,47 +243,47 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 		log.Fatal(err)
 	}
 
-	//// 生成 httprpc client
-	//for _, service := range services {
-	//	servicePbFilePath := fmt.Sprintf("%s/base/%s/%s_http.pb.go", dir, app.Value, service.Name)
-	//
-	//	var contentByte = serviceTplContent
-	//	var content string
-	//	content = string(contentByte)
-	//	content = strings.ReplaceAll(content, "##SERVICE##", service.Name)
-	//	content = strings.ReplaceAll(content, "##APP##", app.Value)
-	//
-	//	for _, rpc := range service.Rpc {
-	//		var subContentByte = rpcTplContent
-	//		var subContent string
-	//		subContent = string(subContentByte)
-	//		subContent = strings.ReplaceAll(subContent, "##SERVICE##", service.Name)
-	//		subContent = strings.ReplaceAll(subContent, "##RPC##", rpc.Name)
-	//		subContent = strings.ReplaceAll(subContent, "##REQ##", rpc.Req)
-	//		subContent = strings.ReplaceAll(subContent, "##RSP##", rpc.Rsp)
-	//
-	//		content = content + subContent
-	//	}
-	//
-	//	// 写文件
-	//	err = ioutil.WriteFile(servicePbFilePath, []byte(content), 0755)
-	//	if err != nil {
-	//		log.Fatal(err)
-	//	}
-	//}
-	//// 生成 call
-	//callContent, err := ioutil.ReadFile(tplCallFilePath)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//callContentStr := string(callContent)
-	//callContentStr = strings.ReplaceAll(callContentStr, "##PROJECT##", project)
-	//callContentStr = strings.ReplaceAll(callContentStr, "##APP##", app.Value)
-	//targetCallFilePath := filepath.Clean(fmt.Sprintf("%s/base/%s/call.pb.go", dir, app.Value))
-	//err = ioutil.WriteFile(targetCallFilePath, []byte(callContentStr), 0755)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
+	// 生成 httprpc client
+	for _, service := range services {
+		servicePbFilePath := fmt.Sprintf("%s/base/%s/%s_http.pb.go", dir, app.Value, service.Name)
+
+		var contentByte = serviceTplContent
+		var content string
+		content = string(contentByte)
+		content = strings.ReplaceAll(content, "##SERVICE##", service.Name)
+		content = strings.ReplaceAll(content, "##APP##", app.Value)
+
+		for _, rpc := range service.Rpc {
+			var subContentByte = rpcTplContent
+			var subContent string
+			subContent = string(subContentByte)
+			subContent = strings.ReplaceAll(subContent, "##SERVICE##", service.Name)
+			subContent = strings.ReplaceAll(subContent, "##RPC##", rpc.Name)
+			subContent = strings.ReplaceAll(subContent, "##REQ##", rpc.Req)
+			subContent = strings.ReplaceAll(subContent, "##RSP##", rpc.Rsp)
+
+			content = content + subContent
+		}
+
+		// 写文件
+		err = ioutil.WriteFile(servicePbFilePath, []byte(content), 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	// 生成 call
+	callContent, err := ioutil.ReadFile(tplCallFilePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	callContentStr := string(callContent)
+	callContentStr = strings.ReplaceAll(callContentStr, "##PROJECT##", project)
+	callContentStr = strings.ReplaceAll(callContentStr, "##APP##", app.Value)
+	targetCallFilePath := filepath.Clean(fmt.Sprintf("%s/base/%s/call.pb.go", dir, app.Value))
+	err = ioutil.WriteFile(targetCallFilePath, []byte(callContentStr), 0755)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// 创建 service 文件
 	for _, service := range services {
