@@ -18,7 +18,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type HelloServiceClient interface {
-	Say(ctx context.Context, in *SayRequest, opts ...grpc.CallOption) (*SayReply, error)
+	SayA(ctx context.Context, in *SayRequest, opts ...grpc.CallOption) (*SayReply, error)
+	SayB(ctx context.Context, in *SayRequest, opts ...grpc.CallOption) (*SayReply, error)
 }
 
 type helloServiceClient struct {
@@ -29,9 +30,18 @@ func NewHelloServiceClient(cc grpc.ClientConnInterface) HelloServiceClient {
 	return &helloServiceClient{cc}
 }
 
-func (c *helloServiceClient) Say(ctx context.Context, in *SayRequest, opts ...grpc.CallOption) (*SayReply, error) {
+func (c *helloServiceClient) SayA(ctx context.Context, in *SayRequest, opts ...grpc.CallOption) (*SayReply, error) {
 	out := new(SayReply)
-	err := c.cc.Invoke(ctx, "/HelloService/Say", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/HelloService/SayA", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *helloServiceClient) SayB(ctx context.Context, in *SayRequest, opts ...grpc.CallOption) (*SayReply, error) {
+	out := new(SayReply)
+	err := c.cc.Invoke(ctx, "/HelloService/SayB", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +52,8 @@ func (c *helloServiceClient) Say(ctx context.Context, in *SayRequest, opts ...gr
 // All implementations must embed UnimplementedHelloServiceServer
 // for forward compatibility
 type HelloServiceServer interface {
-	Say(context.Context, *SayRequest) (*SayReply, error)
+	SayA(context.Context, *SayRequest) (*SayReply, error)
+	SayB(context.Context, *SayRequest) (*SayReply, error)
 	mustEmbedUnimplementedHelloServiceServer()
 }
 
@@ -50,8 +61,11 @@ type HelloServiceServer interface {
 type UnimplementedHelloServiceServer struct {
 }
 
-func (UnimplementedHelloServiceServer) Say(context.Context, *SayRequest) (*SayReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Say not implemented")
+func (UnimplementedHelloServiceServer) SayA(context.Context, *SayRequest) (*SayReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SayA not implemented")
+}
+func (UnimplementedHelloServiceServer) SayB(context.Context, *SayRequest) (*SayReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SayB not implemented")
 }
 func (UnimplementedHelloServiceServer) mustEmbedUnimplementedHelloServiceServer() {}
 
@@ -66,20 +80,38 @@ func RegisterHelloServiceServer(s grpc.ServiceRegistrar, srv HelloServiceServer)
 	s.RegisterService(&HelloService_ServiceDesc, srv)
 }
 
-func _HelloService_Say_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _HelloService_SayA_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SayRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(HelloServiceServer).Say(ctx, in)
+		return srv.(HelloServiceServer).SayA(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/HelloService/Say",
+		FullMethod: "/HelloService/SayA",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HelloServiceServer).Say(ctx, req.(*SayRequest))
+		return srv.(HelloServiceServer).SayA(ctx, req.(*SayRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _HelloService_SayB_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SayRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HelloServiceServer).SayB(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/HelloService/SayB",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HelloServiceServer).SayB(ctx, req.(*SayRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -92,8 +124,98 @@ var HelloService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*HelloServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Say",
-			Handler:    _HelloService_Say_Handler,
+			MethodName: "SayA",
+			Handler:    _HelloService_SayA_Handler,
+		},
+		{
+			MethodName: "SayB",
+			Handler:    _HelloService_SayB_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/app/hello_service.proto",
+}
+
+// ByeServiceClient is the client API for ByeService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type ByeServiceClient interface {
+	B(ctx context.Context, in *BRequest, opts ...grpc.CallOption) (*BReply, error)
+}
+
+type byeServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewByeServiceClient(cc grpc.ClientConnInterface) ByeServiceClient {
+	return &byeServiceClient{cc}
+}
+
+func (c *byeServiceClient) B(ctx context.Context, in *BRequest, opts ...grpc.CallOption) (*BReply, error) {
+	out := new(BReply)
+	err := c.cc.Invoke(ctx, "/ByeService/B", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ByeServiceServer is the server API for ByeService service.
+// All implementations must embed UnimplementedByeServiceServer
+// for forward compatibility
+type ByeServiceServer interface {
+	B(context.Context, *BRequest) (*BReply, error)
+	mustEmbedUnimplementedByeServiceServer()
+}
+
+// UnimplementedByeServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedByeServiceServer struct {
+}
+
+func (UnimplementedByeServiceServer) B(context.Context, *BRequest) (*BReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method B not implemented")
+}
+func (UnimplementedByeServiceServer) mustEmbedUnimplementedByeServiceServer() {}
+
+// UnsafeByeServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ByeServiceServer will
+// result in compilation errors.
+type UnsafeByeServiceServer interface {
+	mustEmbedUnimplementedByeServiceServer()
+}
+
+func RegisterByeServiceServer(s grpc.ServiceRegistrar, srv ByeServiceServer) {
+	s.RegisterService(&ByeService_ServiceDesc, srv)
+}
+
+func _ByeService_B_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ByeServiceServer).B(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ByeService/B",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ByeServiceServer).B(ctx, req.(*BRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// ByeService_ServiceDesc is the grpc.ServiceDesc for ByeService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ByeService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "ByeService",
+	HandlerType: (*ByeServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "B",
+			Handler:    _ByeService_B_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -1,14 +1,14 @@
-package app
+package ##APP##
 
 import (
 	"context"
 )
 
-type RpcService struct {
+type Rpc##SERVICE## struct {
 	##SERVICE##Server
 }
 
-func (s *RpcService) RpcServiceName() (string, string) {
+func (s *Rpc##SERVICE##) RpcServiceName() (string, string) {
 	return "##APP##", "##SERVICE##"
 }
 

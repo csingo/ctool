@@ -144,18 +144,26 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 	project := strings.Trim(strings.Trim(modArr[0], "module"), " ")
 
 	// proto文件
+	var outPath = filepath.Clean(fmt.Sprintf("base/%s", app.Value))
+	err = os.MkdirAll(outPath, 0755)
+	if err != nil {
+		log.Fatal(err)
+	}
 	var protoc = []string{
 		"protoc",
-		fmt.Sprintf("--go_out=base/%s", app.Value),
-		fmt.Sprintf("--go-grpc_out=base/%s", app.Value),
+		fmt.Sprintf("--go_out=%s", outPath),
+		fmt.Sprintf("--go-grpc_out=%s", outPath),
+		"-I",
+		filepath.Clean(protoPath.Value),
 	}
 	err = filepath.Walk(protoPath.Value, func(protoFile string, info fs.FileInfo, err error) error {
 		fileExt := path.Ext(protoFile)
+		filename := path.Base(protoFile)
 		if fileExt != ".proto" {
 			return nil
 		}
 
-		protoc = append(protoc, protoFile)
+		protoc = append(protoc, filename)
 
 		// 读取文件
 		content, err := ioutil.ReadFile(protoFile)
@@ -200,7 +208,7 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 	//log.Printf("%+v", services)
 
 	// 执行 protoc
-	// protoc --go_out=base/app --go-grpc_out=base/app proto/app/hello_service.proto proto/app/enum.proto
+	// protoc --go_out=base/test --go-grpc_out=base/test -I D:\\Qdtech\\projects\\application-services\\ctool\\proto\\app enum.proto error.proto
 	cmd := exec.Command(protoc[0], protoc[1:]...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stdout
@@ -239,16 +247,20 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 	for _, service := range services {
 		servicePbFilePath := fmt.Sprintf("%s/base/%s/%s_http.pb.go", dir, app.Value, service.Name)
 
-		content := string(serviceTplContent)
+		var contentByte = serviceTplContent
+		var content string
+		content = string(contentByte)
 		content = strings.ReplaceAll(content, "##SERVICE##", service.Name)
 		content = strings.ReplaceAll(content, "##APP##", app.Value)
 
 		for _, rpc := range service.Rpc {
-			subContent := string(rpcTplContent)
-			subContent = strings.ReplaceAll(content, "##SERVICE##", service.Name)
-			subContent = strings.ReplaceAll(content, "##RPC##", rpc.Name)
-			subContent = strings.ReplaceAll(content, "##REQ##", rpc.Req)
-			subContent = strings.ReplaceAll(content, "##RSP##", rpc.Rsp)
+			var subContentByte = rpcTplContent
+			var subContent string
+			subContent = string(subContentByte)
+			subContent = strings.ReplaceAll(subContent, "##SERVICE##", service.Name)
+			subContent = strings.ReplaceAll(subContent, "##RPC##", rpc.Name)
+			subContent = strings.ReplaceAll(subContent, "##REQ##", rpc.Req)
+			subContent = strings.ReplaceAll(subContent, "##RSP##", rpc.Rsp)
 
 			content = content + subContent
 		}
@@ -264,8 +276,11 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	callContentStr := string(callContent)
+	callContentStr = strings.ReplaceAll(callContentStr, "##PROJECT##", project)
+	callContentStr = strings.ReplaceAll(callContentStr, "##APP##", app.Value)
 	targetCallFilePath := filepath.Clean(fmt.Sprintf("%s/base/%s/call.pb.go", dir, app.Value))
-	err = ioutil.WriteFile(targetCallFilePath, callContent, 0755)
+	err = ioutil.WriteFile(targetCallFilePath, []byte(callContentStr), 0755)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -282,9 +297,10 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 		for _, rpc := range service.Rpc {
 			appRpcContent := string(appRpcTplContent)
 			appRpcContent = strings.ReplaceAll(appRpcContent, "##SERVICE##", service.Name)
+			appRpcContent = strings.ReplaceAll(appRpcContent, "##APP##", app.Value)
 			appRpcContent = strings.ReplaceAll(appRpcContent, "##RPC##", rpc.Name)
 			appRpcContent = strings.ReplaceAll(appRpcContent, "##REQ##", rpc.Req)
-			appRpcContent = strings.ReplaceAll(appRpcContent, "##Rsp##", rpc.Rsp)
+			appRpcContent = strings.ReplaceAll(appRpcContent, "##RSP##", rpc.Rsp)
 
 			appServiceContent = appServiceContent + appRpcContent
 		}
@@ -294,6 +310,43 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 		if err != nil {
 			log.Fatal(err)
 		}
+	}
+	// 执行 go mod tidy
+	cmd = exec.Command("go", "mod", "tidy")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stdout
+	err = cmd.Run()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// 更新 autoload
+	autoloadFilePath := filepath.Clean(fmt.Sprintf("%s/autoload/service.go", dir))
+	autoloadContent, err := ioutil.ReadFile(autoloadFilePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	importName := fmt.Sprintf("%sService", app.Value)
+	autoloadContentStr := string(autoloadContent)
+	if !strings.Contains(autoloadContentStr, "core/cServer") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportService", fmt.Sprintf("    //TODO:ImportService\n   \"%s/core/cServer\"", project))
+	}
+	if !strings.Contains(autoloadContentStr, importName) {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportService", fmt.Sprintf("    //TODO:ImportService\n   %s \"%s/%s/service\"", importName, project, app.Value))
+	}
+	for _, service := range services {
+		var serviceName = fmt.Sprintf("%s.%s", importName, service.Name)
+		if !strings.Contains(autoloadContentStr, serviceName) {
+			autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:InitService", fmt.Sprintf("    //TODO:InitService\n    cServer.Inject(&%s{})", serviceName))
+		}
+	}
+
+	// 写文件
+	autoloadContent = []byte(autoloadContentStr)
+	err = ioutil.WriteFile(autoloadFilePath, autoloadContent, 0755)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// 创建 controller 文件
@@ -350,8 +403,16 @@ func (i *AppCommand) Controller(app cCommand.Option, name cCommand.Option) {
 
 	importName := fmt.Sprintf("%scontroller", app.Value)
 	autoloadContentStr := string(autoloadContent)
-	autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportController", fmt.Sprintf("    //TODO:InitController\n   %s \"%s/%s/controller\"", importName, project, app.Value))
-	autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:InitController", fmt.Sprintf("    //TODO:InitController\n    cServer.Inject(&%s.%s{})", importName, name.Value))
+	if !strings.Contains(autoloadContentStr, "core/cServer") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportController", fmt.Sprintf("    //TODO:ImportController\n   \"%s/core/cServer\"", project))
+	}
+	if !strings.Contains(autoloadContentStr, importName) {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportController", fmt.Sprintf("    //TODO:ImportController\n   %s \"%s/%s/controller\"", importName, project, app.Value))
+	}
+	controllerName := fmt.Sprintf("%s.%s", importName, name.Value)
+	if !strings.Contains(autoloadContentStr, controllerName) {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:InitController", fmt.Sprintf("    //TODO:InitController\n    cServer.Inject(&%s{})", controllerName))
+	}
 
 	// 写文件
 	autoloadContent = []byte(autoloadContentStr)
@@ -413,8 +474,16 @@ func (i *AppCommand) Command(app cCommand.Option, name cCommand.Option) {
 
 	importName := fmt.Sprintf("%command", app.Value)
 	autoloadContentStr := string(autoloadContent)
-	autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportCommand", fmt.Sprintf("    //TODO:ImportCommand\n   %s \"%s/%s/command\"", importName, project, app.Value))
-	autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:InitCommand", fmt.Sprintf("    //TODO:InitCommand\n    cServer.Inject(&%s.%s{})", importName, name.Value))
+	if !strings.Contains(autoloadContentStr, "core/cServer") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportCommand", fmt.Sprintf("    //TODO:ImportCommand\n   \"%s/core/cServer\"", project))
+	}
+	if !strings.Contains(autoloadContentStr, importName) {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportCommand", fmt.Sprintf("    //TODO:ImportCommand\n   %s \"%s/%s/command\"", importName, project, app.Value))
+	}
+	commandName := fmt.Sprintf("%s.%s", importName, name.Value)
+	if !strings.Contains(autoloadContentStr, commandName) {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:InitCommand", fmt.Sprintf("    //TODO:InitCommand\n    cServer.Inject(&%s{})", commandName))
+	}
 
 	// 写文件
 	autoloadContent = []byte(autoloadContentStr)

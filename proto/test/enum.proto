@@ -1,5 +1,5 @@
 syntax = "proto3";
-option go_package = "./;app";
+option go_package = "./;test";
 
 enum Human {
   NIL = 0;

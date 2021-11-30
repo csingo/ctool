@@ -1,5 +1,5 @@
 syntax = "proto3";
-option go_package = "./;app";
+option go_package = "./;test";
 
 service HelloService {
   rpc SayA(SayRequest) returns (SayReply) {}
