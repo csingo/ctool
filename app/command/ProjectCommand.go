@@ -24,18 +24,24 @@ func (i *ProjectCommand) Help() *cCommand.CommandHelpDoc {
 		},
 		OptionDesc: []cCommand.OptionDesc{
 			{Name: "name", Desc: "名称"},
-			//{Name: "path", Desc: "路径"},
 		},
 	}
 }
 
 func (i *ProjectCommand) Create(name cCommand.Option) {
+	// 获取配置
+	files := vars.Tool.WriteFiles["project::create"]
+	length := len(files)
+	for i := 0; i < length; i++ {
+		files[i] = filepath.Clean(files[i])
+	}
 
 	// 获取创建项目的路径
 	dir, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
 	}
+	dir = "D:\\Self\\ctooltest"
 
 	// 获取模板路径
 	gopath := cHelper.EnvToString("GOPATH", "")
@@ -50,9 +56,8 @@ func (i *ProjectCommand) Create(name cCommand.Option) {
 
 		if !state.IsDir() {
 			fileExt := path.Ext(filePath)
-			if fileExt == ".tpl" {
-				// 创建不存在的目录
-				tempPath := strings.TrimPrefix(filePath, tplPath)
+			tempPath := strings.TrimPrefix(filePath, tplPath)
+			if cHelper.InArrayString(filepath.Clean(tempPath), files) && fileExt == ".tpl" {
 				tempFilePath := filepath.Clean(dir + strings.TrimRight(tempPath, ".tpl"))
 				tempDir := filepath.Dir(tempFilePath)
 				err = os.MkdirAll(tempDir, 0755)
@@ -76,8 +81,6 @@ func (i *ProjectCommand) Create(name cCommand.Option) {
 					return err
 				}
 
-				// 执行指令
-
 				log.Println(tempDir)
 			}
 		}
@@ -88,19 +91,27 @@ func (i *ProjectCommand) Create(name cCommand.Option) {
 		log.Fatal(err)
 	}
 
-	//err = shell(dir)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
+	err = shell()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
-func shell(dir string) error {
-	shellFile := dir + "/bin/init.sh"
-	cmd := exec.Command(shellFile)
-	cmd.Stdout = os.Stdout
-	err := cmd.Run()
-	if err != nil {
-		return err
+func shell() error {
+	commands := []string{
+		"go mod init cxy",
+		"go mod tidy",
+	}
+
+	for _, command := range commands {
+		commandArr := strings.Split(command, " ")
+		cmd := exec.Command(commandArr[0], commandArr[1:]...)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stdout
+		err := cmd.Run()
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
