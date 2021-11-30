@@ -13,5 +13,5 @@ func main() {
 
 	cCommand.Run(args[1], args[2:]...)
 
-	//cCommand.Run("app::create", "--name=test")
+	//cCommand.Run("app::service", "--app=app", "--protoPath=D:\\Qdtech\\projects\\application-services\\ctool\\proto\\app")
 }

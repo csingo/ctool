@@ -2,7 +2,12 @@ syntax = "proto3";
 option go_package = "./;app";
 
 service HelloService {
-  rpc Say(SayRequest) returns (SayReply);
+  rpc SayA(SayRequest) returns (SayReply) {}
+  rpc SayB(SayRequest) returns (SayReply) {}
+}
+
+service ByeService {
+  rpc B(BRequest) returns (BReply);
 }
 
 message SayRequest {
@@ -11,5 +16,14 @@ message SayRequest {
 }
 
 message SayReply {
+  string content = 1;
+}
+
+message BRequest {
+  string name = 1;
+  int64 age = 2;
+}
+
+message BReply {
   string content = 1;
 }

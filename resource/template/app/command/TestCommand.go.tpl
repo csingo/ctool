@@ -5,14 +5,13 @@ import (
 	"log"
 )
 
-type TestCommand struct{}
+type ##COMMAND## struct{}
 
-func (i *TestCommand) Help() *cCommand.CommandHelpDoc {
+func (i *##COMMAND##) Help() *cCommand.CommandHelpDoc {
 	return &cCommand.CommandHelpDoc{
-		CommandDesc: cCommand.CommandDesc{Name: "test", Desc: "测试"},
+		CommandDesc: cCommand.CommandDesc{Name: "##COMMANDNAME##", Desc: ""},
 		MethodDesc: []cCommand.MethodDesc{
 			{Name: "hello", Desc: "你好", Options: []string{"name"}},
-			{Name: "test", Desc: "生成手机号", Options: []string{"name"}},
 		},
 		OptionDesc: []cCommand.OptionDesc{
 			{Name: "name", Desc: "名称"},
@@ -20,10 +19,6 @@ func (i *TestCommand) Help() *cCommand.CommandHelpDoc {
 	}
 }
 
-func (i *TestCommand) Hello(name cCommand.Option) {
-	//app.HelloService.Say(context.Background(), nil)
+func (i *##COMMAND##) Hello(name cCommand.Option) {
 	log.Printf("hello %s", name.Value)
-}
-
-func (i *TestCommand) Test() {
 }
