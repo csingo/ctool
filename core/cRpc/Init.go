@@ -3,7 +3,6 @@ package cRpc
 import (
 	"errors"
 	"fmt"
-	"log"
 	"reflect"
 )
 
@@ -15,7 +14,6 @@ func Inject(instance interface{}) {
 	app, service := instance.(RpcServiceInterface).RpcServiceName()
 	name := fmt.Sprintf("%s/%s", app, service)
 	rpcServiceContainer.services[name] = instance.(RpcServiceInterface)
-	log.Printf("%#V", rpcServiceContainer)
 }
 
 func IsRpcService(instance interface{}) bool {
