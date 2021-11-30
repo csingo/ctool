@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"##PROJECT##/app/service"
 	"##PROJECT##/response"
 	"github.com/gin-gonic/gin"
 )

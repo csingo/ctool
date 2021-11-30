@@ -329,6 +329,9 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 
 	importName := fmt.Sprintf("%sService", app.Value)
 	autoloadContentStr := string(autoloadContent)
+	if !strings.Contains(autoloadContentStr, "import (") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "func initService() {", "import (\n)\n\nfunc initService() {")
+	}
 	if !strings.Contains(autoloadContentStr, "//TODO:ImportService") {
 		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "import (", "import (\n    //TODO:ImportService")
 	}
@@ -409,6 +412,9 @@ func (i *AppCommand) Controller(app cCommand.Option, name cCommand.Option) {
 
 	importName := fmt.Sprintf("%scontroller", app.Value)
 	autoloadContentStr := string(autoloadContent)
+	if !strings.Contains(autoloadContentStr, "import (") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "func initController() {", "import (\n)\n\nfunc initController() {")
+	}
 	if !strings.Contains(autoloadContentStr, "//TODO:ImportController") {
 		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "import (", "import (\n    //TODO:ImportController")
 	}
@@ -486,6 +492,9 @@ func (i *AppCommand) Command(app cCommand.Option, name cCommand.Option) {
 
 	importName := fmt.Sprintf("%command", app.Value)
 	autoloadContentStr := string(autoloadContent)
+	if !strings.Contains(autoloadContentStr, "import (") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "func initCommand() {", "import (\n)\n\nfunc initCommand() {")
+	}
 	if !strings.Contains(autoloadContentStr, "//TODO:ImportCommand") {
 		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "import (", "import (\n    //TODO:ImportCommand")
 	}
