@@ -3,7 +3,13 @@ package vars
 import "gitee.com/csingo/ctool/config/typs"
 
 var Tool = &typs.ToolConf{
-	Version: "v0.0.20",
+	Version:           "v0.0.21",
+	ProtoGenGoPackage: "google.golang.org/protobuf/cmd/protoc-gen-go@v1.26.0",
+	ProtocDownload: &typs.ToolConf_ProtocAddr{
+		Win:   "https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-win64.zip",
+		Mac:   "https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-osx-x86_64.zip",
+		Linux: "https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-linux-x86_64.zip",
+	},
 	WriteFiles: map[string][]string{
 		"project::create": {
 			"/.gitignore.tpl",
@@ -102,4 +108,3 @@ var Tool = &typs.ToolConf{
 		},
 	},
 }
-

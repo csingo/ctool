@@ -1,8 +1,16 @@
 package typs
 
 type ToolConf struct {
-	Version    string
-	WriteFiles map[string][]string
+	Version           string
+	ProtocDownload    *ToolConf_ProtocAddr
+	ProtoGenGoPackage string
+	WriteFiles        map[string][]string
+}
+
+type ToolConf_ProtocAddr struct {
+	Win   string
+	Mac   string
+	Linux string
 }
 
 func (i *ToolConf) ConfigName() string {

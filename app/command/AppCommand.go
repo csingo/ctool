@@ -35,6 +35,7 @@ func (i *AppCommand) Help() *cCommand.CommandHelpDoc {
 		MethodDesc: []cCommand.MethodDesc{
 			{Name: "create", Desc: "创建app", Options: []string{"name"}},
 			{Name: "controller", Desc: "创建controller", Options: []string{"app", "name"}},
+			{Name: "middleware", Desc: "创建controller", Options: []string{"app", "name"}},
 			{Name: "command", Desc: "创建command", Options: []string{"app", "name"}},
 			{Name: "service", Desc: "创建service", Options: []string{"app", "protoPath"}},
 		},
@@ -490,7 +491,7 @@ func (i *AppCommand) Command(app cCommand.Option, name cCommand.Option) {
 		log.Fatal(err)
 	}
 
-	importName := fmt.Sprintf("%command", app.Value)
+	importName := fmt.Sprintf("%scommand", app.Value)
 	autoloadContentStr := string(autoloadContent)
 	if !strings.Contains(autoloadContentStr, "import (") {
 		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "func initCommand() {", "import (\n)\n\nfunc initCommand() {")
@@ -510,6 +511,85 @@ func (i *AppCommand) Command(app cCommand.Option, name cCommand.Option) {
 	commandName := fmt.Sprintf("%s.%s", importName, name.Value)
 	if !strings.Contains(autoloadContentStr, commandName) {
 		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:InitCommand", fmt.Sprintf("    //TODO:InitCommand\n    cServer.Inject(&%s{})", commandName))
+	}
+
+	// 写文件
+	autoloadContent = []byte(autoloadContentStr)
+	err = ioutil.WriteFile(autoloadFilePath, autoloadContent, 0755)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (i *AppCommand) Middleware(app cCommand.Option, name cCommand.Option) {
+	// 获取创建项目的路径
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// 读取project name
+	modFile := dir + "/go.mod"
+	modContent, err := ioutil.ReadFile(modFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+	modArr := strings.Split(string(modContent), "\n")
+	if len(modArr) <= 0 {
+		log.Fatal("mod file is empty")
+	}
+	project := strings.Trim(strings.Trim(modArr[0], "module"), " ")
+
+	// 获取模板路径
+	gopath := cHelper.EnvToString("GOPATH", "")
+	tplPath := filepath.Clean(gopath + "/pkg/mod/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
+	tplFilePath := fmt.Sprintf("%s/app/middleware/TestMiddleware.go.tpl", tplPath)
+
+	// 读取文件
+	content, err := ioutil.ReadFile(tplFilePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	contentStr := string(content)
+	contentStr = strings.ReplaceAll(contentStr, "##PROJECT##", project)
+	contentStr = strings.ReplaceAll(contentStr, "##MIDDLEWARE##", name.Value)
+
+	// 写文件
+	targetFilePath := filepath.Clean(fmt.Sprintf("%s/%s/middleware/%s.go", dir, app.Value, name.Value))
+	content = []byte(contentStr)
+	err = ioutil.WriteFile(targetFilePath, content, 0755)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// 更新autoload
+	autoloadFilePath := filepath.Clean(fmt.Sprintf("%s/autoload/middleware.go", dir))
+	autoloadContent, err := ioutil.ReadFile(autoloadFilePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	importName := fmt.Sprintf("%smiddleware", app.Value)
+	autoloadContentStr := string(autoloadContent)
+	if !strings.Contains(autoloadContentStr, "import (") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "func initMiddleware() {", "import (\n)\n\nfunc initMiddleware() {")
+	}
+	if !strings.Contains(autoloadContentStr, "//TODO:ImportMiddleware") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "import (", "import (\n    //TODO:ImportMiddleware")
+	}
+	if !strings.Contains(autoloadContentStr, "//TODO:InitMiddleware") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "func initMiddleware() {", "func initMiddleware() {\n    //TODO:InitMiddleware")
+	}
+	if !strings.Contains(autoloadContentStr, "core/cServer") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportMiddleware", fmt.Sprintf("    //TODO:ImportMiddleware\n   \"%s/core/cServer\"", project))
+	}
+	if !strings.Contains(autoloadContentStr, importName) {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportMiddleware", fmt.Sprintf("    //TODO:ImportMiddleware\n   %s \"%s/%s/middleware\"", importName, project, app.Value))
+	}
+	middlewareName := fmt.Sprintf("%s.%s", importName, name.Value)
+	if !strings.Contains(autoloadContentStr, middlewareName) {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:InitMiddleware", fmt.Sprintf("    //TODO:InitMiddleware\n    cServer.Inject(&%s{})", middlewareName))
 	}
 
 	// 写文件

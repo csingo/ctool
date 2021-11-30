@@ -5,12 +5,12 @@ import (
 	"log"
 )
 
-type TestMiddleware struct{}
+type ##MIDDLEWARE## struct{}
 
-func (i *TestMiddleware) Middleware() string {
+func (i *##MIDDLEWARE##) Middleware() string {
 	return "Base"
 }
 
-func (i *TestMiddleware) Handler(c *gin.Context) {
-	log.Printf("[%s] %s", c.Request.Method, c.Request.RequestURI)
+func (i *##MIDDLEWARE##) Handler(c *gin.Context) {
+	log.Println("handler")
 }
