@@ -329,6 +329,12 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 
 	importName := fmt.Sprintf("%sService", app.Value)
 	autoloadContentStr := string(autoloadContent)
+	if !strings.Contains(autoloadContentStr, "//TODO:ImportService") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "import (", "import (\n    //TODO:ImportService")
+	}
+	if !strings.Contains(autoloadContentStr, "//TODO:InitService") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "func initService() {", "func initService() {\n    //TODO:InitService")
+	}
 	if !strings.Contains(autoloadContentStr, "core/cServer") {
 		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportService", fmt.Sprintf("    //TODO:ImportService\n   \"%s/core/cServer\"", project))
 	}
@@ -403,6 +409,12 @@ func (i *AppCommand) Controller(app cCommand.Option, name cCommand.Option) {
 
 	importName := fmt.Sprintf("%scontroller", app.Value)
 	autoloadContentStr := string(autoloadContent)
+	if !strings.Contains(autoloadContentStr, "//TODO:ImportController") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "import (", "import (\n    //TODO:ImportController")
+	}
+	if !strings.Contains(autoloadContentStr, "//TODO:InitController") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "func initController() {", "func initController() {\n    //TODO:InitController")
+	}
 	if !strings.Contains(autoloadContentStr, "core/cServer") {
 		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportController", fmt.Sprintf("    //TODO:ImportController\n   \"%s/core/cServer\"", project))
 	}
@@ -474,6 +486,12 @@ func (i *AppCommand) Command(app cCommand.Option, name cCommand.Option) {
 
 	importName := fmt.Sprintf("%command", app.Value)
 	autoloadContentStr := string(autoloadContent)
+	if !strings.Contains(autoloadContentStr, "//TODO:ImportCommand") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "import (", "import (\n    //TODO:ImportCommand")
+	}
+	if !strings.Contains(autoloadContentStr, "//TODO:InitCommand") {
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "func initCommand() {", "func initCommand() {\n    //TODO:InitCommand")
+	}
 	if !strings.Contains(autoloadContentStr, "core/cServer") {
 		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportCommand", fmt.Sprintf("    //TODO:ImportCommand\n   \"%s/core/cServer\"", project))
 	}
