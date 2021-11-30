@@ -13,5 +13,4 @@ func initConfig() {
 	cServer.Inject(vars.Route)
 	cServer.Inject(vars.Server)
 	cServer.Inject(vars.RpcConf)
-	cServer.Inject(vars.Tool)
 }
