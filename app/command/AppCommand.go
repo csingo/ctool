@@ -40,7 +40,18 @@ func (i *AppCommand) Create(name cCommand.Option) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	dir = "D:\\Self\\ctooltest"
+
+	// 读取project name
+	//modFile := dir + "/go.mod"
+	//modContent, err := ioutil.ReadFile(modFile)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//modArr := strings.Split(string(modContent), "\n")
+	//if len(modArr) <= 0 {
+	//	log.Fatal("mod file is empty")
+	//}
+	//mod := strings.Trim(strings.Trim(modArr[0], "module"), " ")
 
 	// 获取模板路径
 	gopath := cHelper.EnvToString("GOPATH", "")
