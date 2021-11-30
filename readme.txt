@@ -69,7 +69,7 @@ tool app::create --name=app [--path=.]
     --appPath       应用所有目录，不存在则新建。默认当前目录
 
 tool app::service --app=app [--protoPath=.]
-tool app::proto --app=app [--protoPath=.]
+tool app::sdk --sdk=app2 [--protoPath=.]
 tool app::command --app=app --name=TestCommand
 tool app::controller --app=app --name=TestController
 tool app::orm --app=app --name=TestOrm

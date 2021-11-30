@@ -41,7 +41,6 @@ func (i *ProjectCommand) Create(name cCommand.Option) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	dir = "D:\\Self\\ctooltest"
 
 	// 获取模板路径
 	gopath := cHelper.EnvToString("GOPATH", "")

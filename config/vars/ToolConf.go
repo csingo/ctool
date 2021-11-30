@@ -3,7 +3,7 @@ package vars
 import "gitee.com/csingo/ctool/config/typs"
 
 var Tool = &typs.ToolConf{
-	Version: "v0.0.8",
+	Version: "v0.0.9",
 	WriteFiles: map[string][]string{
 		"project::create": {
 			"/.gitignore.tpl",
@@ -87,6 +87,18 @@ var Tool = &typs.ToolConf{
 			"/response/Type.go.tpl",
 			"/server/.gitkeep.tpl",
 			"/server/main.go.tpl",
+		},
+		"app::create": {
+			"/app/.gitkeep.tpl",
+			"/app/command/.gitkeep.tpl",
+			//"/app/command/TestCommand.go.tpl",
+			"/app/controller/.gitkeep.tpl",
+			//"/app/controller/HomeController.go.tpl",
+			"/app/middleware/.gitkeep.tpl",
+			//"/app/middleware/TestMiddleware.go.tpl",
+			"/app/service/.gitkeep.tpl",
+			//"/app/service/HelloService.go.tpl",
+			"/app/validator/.gitkeep.tpl",
 		},
 	},
 }
