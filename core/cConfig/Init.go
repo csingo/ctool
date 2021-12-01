@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gitee.com/csingo/ctool/core/cHelper"
 	"io/ioutil"
 	"log"
 	"reflect"
 	"strings"
 	"time"
+
+	"gitee.com/csingo/ctool/autoload/qdLog"
+	"gitee.com/csingo/ctool/core/cHelper"
 )
 
 // Inject 注入配置
@@ -36,12 +38,14 @@ func Load() {
 		name := instance.(ConfigInterface).ConfigName()
 		jsonBytes, err := readConf(name)
 		if err != nil {
-			log.Printf("read cConfig err: [%s] %+v", name, err)
+			qdLog.Error("read cConfig err", map[string]interface{}{name: err})
+			// log.Printf("read cConfig err: [%s] %+v", name, err)
 			continue
 		}
 		err = json.Unmarshal(jsonBytes, instance)
 		if err != nil {
-			log.Printf("json unmarshal cConfig err: [%s] %+v", name, jsonBytes)
+			qdLog.Error("json unmarshal cConfig err", map[string]interface{}{name: jsonBytes})
+			// log.Printf("json unmarshal cConfig err: [%s] %+v", name, jsonBytes)
 			continue
 		}
 		hex := md5.Sum(jsonBytes)

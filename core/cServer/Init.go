@@ -1,14 +1,15 @@
 package cServer
 
 import (
-	"gitee.com/csingo/ctool/core/cCommand"
-	"gitee.com/csingo/ctool/core/cConfig"
-	"gitee.com/csingo/ctool/core/cMiddleware"
-	"gitee.com/csingo/ctool/core/cRpc"
 	"os"
 	"os/signal"
 	"reflect"
 	"syscall"
+
+	"gitee.com/csingo/ctool/core/cCommand"
+	"gitee.com/csingo/ctool/core/cConfig"
+	"gitee.com/csingo/ctool/core/cMiddleware"
+	"gitee.com/csingo/ctool/core/cRpc"
 )
 
 // Inject 注入实体
