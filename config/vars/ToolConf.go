@@ -3,7 +3,7 @@ package vars
 import "gitee.com/csingo/ctool/config/typs"
 
 var Tool = &typs.ToolConf{
-	Version:           "v0.0.23",
+	Version:           "v0.0.24",
 	ProtoGenGoPackage: "google.golang.org/protobuf/cmd/protoc-gen-go@v1.26.0",
 	ProtocDownload: &typs.ToolConf_ProtocAddr{
 		Win:   "https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-win64.zip",
@@ -14,16 +14,6 @@ var Tool = &typs.ToolConf{
 		"project::create": {
 			"/.gitignore.tpl",
 			"/Makefile.tpl",
-			//"/app/.gitkeep.tpl",
-			//"/app/command/.gitkeep.tpl",
-			//"/app/command/TestCommand.go.tpl",
-			//"/app/controller/.gitkeep.tpl",
-			//"/app/controller/HomeController.go.tpl",
-			//"/app/middleware/.gitkeep.tpl",
-			//"/app/middleware/TestMiddleware.go.tpl",
-			//"/app/service/.gitkeep.tpl",
-			//"/app/service/HelloService.go.tpl",
-			//"/app/validator/.gitkeep.tpl",
 			"/autoload/.gitkeep.tpl",
 			"/autoload/command.go.tpl",
 			"/autoload/config.go.tpl",
@@ -33,9 +23,6 @@ var Tool = &typs.ToolConf{
 			"/autoload/rpc.go.tpl",
 			"/autoload/service.go.tpl",
 			"/base/.gitkeep.tpl",
-			//"/base/app/.gitkeep.tpl",
-			//"/base/app/call.pb.go.tpl",
-			//"/base/app/hello_service_http.pb.go.tpl",
 			"/bin/.gitkeep.tpl",
 			"/bin/init.sh.tpl",
 			"/config/.gitkeep.tpl",
@@ -104,13 +91,9 @@ var Tool = &typs.ToolConf{
 		"app::create": {
 			"/app/.gitkeep.tpl",
 			"/app/command/.gitkeep.tpl",
-			//"/app/command/TestCommand.go.tpl",
 			"/app/controller/.gitkeep.tpl",
-			//"/app/controller/HomeController.go.tpl",
 			"/app/middleware/.gitkeep.tpl",
-			//"/app/middleware/TestMiddleware.go.tpl",
 			"/app/service/.gitkeep.tpl",
-			//"/app/service/HelloService.go.tpl",
 			"/app/validator/.gitkeep.tpl",
 		},
 	},
