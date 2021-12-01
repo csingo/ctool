@@ -52,6 +52,7 @@ func Init() {
 	cLog.Load()
 	cConfig.Load()
 	cCommand.Load()
+	Load()
 
 	cCommand.SetSysExitChannel(app.exit)
 

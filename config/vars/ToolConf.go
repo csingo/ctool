@@ -3,7 +3,7 @@ package vars
 import "gitee.com/csingo/ctool/config/typs"
 
 var Tool = &typs.ToolConf{
-	Version:           "v0.0.22",
+	Version:           "v0.0.23",
 	ProtoGenGoPackage: "google.golang.org/protobuf/cmd/protoc-gen-go@v1.26.0",
 	ProtocDownload: &typs.ToolConf_ProtocAddr{
 		Win:   "https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-win64.zip",
@@ -43,6 +43,7 @@ var Tool = &typs.ToolConf{
 			"/config/typs/CommandConf.go.tpl",
 			"/config/typs/ConfigCenterConf.go.tpl",
 			"/config/typs/DatabaseConf.go.tpl",
+			"/config/typs/LogConf.go.tpl",
 			"/config/typs/RedisConf.go.tpl",
 			"/config/typs/RouteConf.go.tpl",
 			"/config/typs/RpcConf.go.tpl",
@@ -51,10 +52,14 @@ var Tool = &typs.ToolConf{
 			"/config/vars/CommandConf.go.tpl",
 			"/config/vars/ConfigCenterConf.go.tpl",
 			"/config/vars/DatabaseConf.go.tpl",
+			"/config/vars/LogConf.go.tpl",
 			"/config/vars/RedisConf.go.tpl",
 			"/config/vars/RouteConf.go.tpl",
 			"/config/vars/RpcConf.go.tpl",
 			"/config/vars/ServerConf.go.tpl",
+			"/conn/.gitkeep.tpl",
+			"/conn/database.go.tpl",
+			"/conn/redis.go.tpl",
 			"/core/.gitkeep.tpl",
 			"/core/cCommand/.gitkeep.tpl",
 			"/core/cCommand/Init.go.tpl",
@@ -74,6 +79,8 @@ var Tool = &typs.ToolConf{
 			"/core/cHelper/Math.go.tpl",
 			"/core/cHelper/String.go.tpl",
 			"/core/cHelper/constants/randomType/Index.go.tpl",
+			"/core/cLog/.gitkeep.tpl",
+			"/core/cLog/Init.go.tpl",
 			"/core/cMiddleware/.gitkeep.tpl",
 			"/core/cMiddleware/Init.go.tpl",
 			"/core/cMiddleware/Types.go.tpl",

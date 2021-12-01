@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"##PROJECT##/core/cHelper"
 	"io/ioutil"
 	"log"
 	"reflect"
 	"strings"
 	"time"
+
+	"##PROJECT##/core/cHelper"
+	"##PROJECT##/core/cLog"
 )
 
 // Inject 注入配置
@@ -36,12 +38,14 @@ func Load() {
 		name := instance.(ConfigInterface).ConfigName()
 		jsonBytes, err := readConf(name)
 		if err != nil {
-			log.Printf("read cConfig err: [%s] %+v", name, err)
+			cLog.Error("read cConfig err", map[string]interface{}{name: err})
+			// log.Printf("read cConfig err: [%s] %+v", name, err)
 			continue
 		}
 		err = json.Unmarshal(jsonBytes, instance)
 		if err != nil {
-			log.Printf("json unmarshal cConfig err: [%s] %+v", name, jsonBytes)
+			cLog.Error("json unmarshal cConfig err", map[string]interface{}{name: jsonBytes})
+			// log.Printf("json unmarshal cConfig err: [%s] %+v", name, jsonBytes)
 			continue
 		}
 		hex := md5.Sum(jsonBytes)

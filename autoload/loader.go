@@ -7,5 +7,4 @@ func Init() {
 	initMiddleware()
 	initService()
 	initRpcClient()
-
 }

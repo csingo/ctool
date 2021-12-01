@@ -1,14 +1,16 @@
 package cServer
 
 import (
-	"##PROJECT##/core/cCommand"
-	"##PROJECT##/core/cConfig"
-	"##PROJECT##/core/cMiddleware"
-	"##PROJECT##/core/cRpc"
 	"os"
 	"os/signal"
 	"reflect"
 	"syscall"
+
+	"##PROJECT##/core/cCommand"
+	"##PROJECT##/core/cConfig"
+	"##PROJECT##/core/cLog"
+	"##PROJECT##/core/cMiddleware"
+	"##PROJECT##/core/cRpc"
 )
 
 // Inject 注入实体
@@ -47,6 +49,7 @@ func Load() {
 }
 
 func Init() {
+	cLog.Load()
 	cConfig.Load()
 	cCommand.Load()
 	Load()
