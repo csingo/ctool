@@ -4,6 +4,7 @@ option go_package = "./;test";
 service HelloService {
   rpc SayA(SayRequest) returns (SayReply) {}
   rpc SayB(SayRequest) returns (SayReply) {}
+  rpc SayC(SayRequest) returns (SayReply) {}
 }
 
 service ByeService {

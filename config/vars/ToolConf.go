@@ -3,7 +3,7 @@ package vars
 import "gitee.com/csingo/ctool/config/typs"
 
 var Tool = &typs.ToolConf{
-	Version:           "v0.0.21",
+	Version:           "v0.0.22",
 	ProtoGenGoPackage: "google.golang.org/protobuf/cmd/protoc-gen-go@v1.26.0",
 	ProtocDownload: &typs.ToolConf_ProtocAddr{
 		Win:   "https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-win64.zip",

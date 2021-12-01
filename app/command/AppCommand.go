@@ -61,18 +61,6 @@ func (i *AppCommand) Create(name cCommand.Option) {
 		log.Fatal(err)
 	}
 
-	// 读取project name
-	//modFile := dir + "/go.mod"
-	//modContent, err := ioutil.ReadFile(modFile)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//modArr := strings.Split(string(modContent), "\n")
-	//if len(modArr) <= 0 {
-	//	log.Fatal("mod file is empty")
-	//}
-	//mod := strings.Trim(strings.Trim(modArr[0], "module"), " ")
-
 	// 获取模板路径
 	gopath := cHelper.EnvToString("GOPATH", "")
 	tplPath := filepath.Clean(gopath + "/pkg/mod/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
@@ -144,7 +132,7 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 	}
 	project := strings.Trim(strings.Trim(modArr[0], "module"), " ")
 
-	// proto文件
+	// proto文件分析
 	var outPath = filepath.Clean(fmt.Sprintf("base/%s", app.Value))
 	err = os.MkdirAll(outPath, 0755)
 	if err != nil {
@@ -244,7 +232,7 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 		log.Fatal(err)
 	}
 
-	// 生成 httprpc client
+	// 生成 httprpc server 和 http client
 	for _, service := range services {
 		servicePbFilePath := fmt.Sprintf("%s/base/%s/%s_http.pb.go", dir, app.Value, service.Name)
 
@@ -281,14 +269,22 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 	callContentStr = strings.ReplaceAll(callContentStr, "##PROJECT##", project)
 	callContentStr = strings.ReplaceAll(callContentStr, "##APP##", app.Value)
 	targetCallFilePath := filepath.Clean(fmt.Sprintf("%s/base/%s/call.pb.go", dir, app.Value))
-	err = ioutil.WriteFile(targetCallFilePath, []byte(callContentStr), 0755)
-	if err != nil {
-		log.Fatal(err)
+	if !cHelper.IsExistsPath(targetCallFilePath) {
+		err = ioutil.WriteFile(targetCallFilePath, []byte(callContentStr), 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	// 创建 service 文件
 	for _, service := range services {
 		appServiceFilePath := fmt.Sprintf("%s/%s/service/%s.go", dir, app.Value, service.Name)
+		if cHelper.IsExistsPath(appServiceFilePath) {
+			appServiceTplContent, err = ioutil.ReadFile(appServiceFilePath)
+			if err != nil {
+				log.Fatalln(err)
+			}
+		}
 
 		appServiceContent := string(appServiceTplContent)
 		appServiceContent = strings.ReplaceAll(appServiceContent, "##PROJECT##", project)
@@ -303,7 +299,10 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 			appRpcContent = strings.ReplaceAll(appRpcContent, "##REQ##", rpc.Req)
 			appRpcContent = strings.ReplaceAll(appRpcContent, "##RSP##", rpc.Rsp)
 
-			appServiceContent = appServiceContent + appRpcContent
+			rpcReg := regexp.MustCompile(`func *\(\w+ *\*` + service.Name + `\) *` + rpc.Name + ` *\(`)
+			if !rpcReg.MatchString(appServiceContent) {
+				appServiceContent = appServiceContent + appRpcContent
+			}
 		}
 
 		// 写文件
@@ -398,6 +397,9 @@ func (i *AppCommand) Controller(app cCommand.Option, name cCommand.Option) {
 
 	// 写文件
 	targetFilePath := filepath.Clean(fmt.Sprintf("%s/%s/controller/%s.go", dir, app.Value, name.Value))
+	if cHelper.IsExistsPath(targetFilePath) {
+		log.Fatalf("file is exists: %s", targetFilePath)
+	}
 	content = []byte(contentStr)
 	err = ioutil.WriteFile(targetFilePath, content, 0755)
 	if err != nil {
@@ -477,7 +479,10 @@ func (i *AppCommand) Command(app cCommand.Option, name cCommand.Option) {
 	contentStr = strings.ReplaceAll(contentStr, "##COMMANDNAME##", strings.ToLower(name.Value))
 
 	// 写文件
-	targetFilePath := filepath.Clean(fmt.Sprintf("%s/%s/controller/%s.go", dir, app.Value, name.Value))
+	targetFilePath := filepath.Clean(fmt.Sprintf("%s/%s/command/%s.go", dir, app.Value, name.Value))
+	if cHelper.IsExistsPath(targetFilePath) {
+		log.Fatalf("file is exists: %s", targetFilePath)
+	}
 	content = []byte(contentStr)
 	err = ioutil.WriteFile(targetFilePath, content, 0755)
 	if err != nil {
@@ -557,6 +562,9 @@ func (i *AppCommand) Middleware(app cCommand.Option, name cCommand.Option) {
 
 	// 写文件
 	targetFilePath := filepath.Clean(fmt.Sprintf("%s/%s/middleware/%s.go", dir, app.Value, name.Value))
+	if cHelper.IsExistsPath(targetFilePath) {
+		log.Fatalf("file is exists: %s", targetFilePath)
+	}
 	content = []byte(contentStr)
 	err = ioutil.WriteFile(targetFilePath, content, 0755)
 	if err != nil {
