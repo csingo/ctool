@@ -8,6 +8,7 @@ import (
 
 	"gitee.com/csingo/ctool/core/cCommand"
 	"gitee.com/csingo/ctool/core/cConfig"
+	"gitee.com/csingo/ctool/core/cLog"
 	"gitee.com/csingo/ctool/core/cMiddleware"
 	"gitee.com/csingo/ctool/core/cRpc"
 )
@@ -48,9 +49,9 @@ func Load() {
 }
 
 func Init() {
+	cLog.Load()
 	cConfig.Load()
 	cCommand.Load()
-	Load()
 
 	cCommand.SetSysExitChannel(app.exit)
 

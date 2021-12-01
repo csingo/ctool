@@ -1,4 +1,4 @@
-package qdLog
+package cLog
 
 import (
 	"os"
@@ -9,7 +9,7 @@ import (
 
 var log = logrus.New()
 
-func InitLog() {
+func Load() {
 	// 设置将日志输出到标准输出
 	log.SetOutput(os.Stdout)
 	// 设置日志格式为json格式和时间格式
@@ -23,11 +23,11 @@ func InitLog() {
 }
 
 func Trace(msg string, parmas map[string]interface{}) {
-	WithFields(parmas).Info(msg)
+	WithFields(parmas).Trace(msg)
 }
 
 func Debug(msg string, parmas map[string]interface{}) {
-	WithFields(parmas).Info(msg)
+	WithFields(parmas).Debug(msg)
 }
 
 func Info(msg string, parmas map[string]interface{}) {
@@ -35,19 +35,19 @@ func Info(msg string, parmas map[string]interface{}) {
 }
 
 func Warn(msg string, parmas map[string]interface{}) {
-	WithFields(parmas).Info(msg)
+	WithFields(parmas).Warn(msg)
 }
 
 func Error(msg string, parmas map[string]interface{}) {
-	WithFields(parmas).Info(msg)
+	WithFields(parmas).Error(msg)
 }
 
 func Fatal(msg string, parmas map[string]interface{}) {
-	WithFields(parmas).Info(msg)
+	WithFields(parmas).Fatal(msg)
 }
 
 func Panic(msg string, parmas map[string]interface{}) {
-	WithFields(parmas).Info(msg)
+	WithFields(parmas).Panic(msg)
 }
 
 func WithFields(parmas map[string]interface{}) *logrus.Entry {
