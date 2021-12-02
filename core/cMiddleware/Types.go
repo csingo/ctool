@@ -1,6 +1,8 @@
 package cMiddleware
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 type MiddlewareInterface interface {
 	Middleware() string

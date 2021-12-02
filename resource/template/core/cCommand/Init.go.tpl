@@ -18,13 +18,13 @@ func Inject(instance interface{}) {
 	doc := instance.(CommandInterface).Help()
 	instanceName := doc.CommandDesc.Name
 	instanceMethods := doc.MethodDesc
-	CommandContainer.instances[instanceName] = instance
+	commandContainer.instances[instanceName] = instance
 
 	var labels []string
 	for _, method := range instanceMethods {
 		labels = append(labels, instanceName+"::"+method.Name)
 	}
-	CommandContainer.labels = append(CommandContainer.labels, labels...)
+	commandContainer.labels = append(commandContainer.labels, labels...)
 }
 
 // Load 初始化加载
@@ -41,7 +41,7 @@ func IsCommand(o interface{}) bool {
 
 // Run 执行command
 func Run(label string, options ...string) {
-	if !cHelper.InArrayString(label, CommandContainer.labels) {
+	if !cHelper.InArrayString(label, commandContainer.labels) {
 		log.Printf("cCommand not found: %s %v", label, options)
 		return
 	}
@@ -56,7 +56,7 @@ func Run(label string, options ...string) {
 	commandName := labels[0]
 	methodName := labels[1]
 
-	instance := CommandContainer.instances[commandName]
+	instance := commandContainer.instances[commandName]
 	instanceDoc := instance.(CommandInterface).Help()
 	methods := instanceDoc.MethodDesc
 	var optionNames []string
@@ -125,7 +125,7 @@ func exec(argv *CommandArgvs) {
 
 	defer func(uuid string) {
 		if r := recover(); r != nil {
-			log.Printf("cCommand exec error: %s", state.running[uuid])
+			log.Printf("cCommand exec error: %s %s", state.running[uuid], r)
 		}
 
 		// cCommand 执行完成，删除uuid
@@ -189,4 +189,12 @@ func StartResident() {
 
 func StopCron() {
 	state.cron.Stop()
+}
+
+func GetAllCommand() map[string]CommandInterface {
+	var instances = make(map[string]CommandInterface)
+	for name, instance := range commandContainer.instances {
+		instances[name] = instance.(CommandInterface)
+	}
+	return instances
 }

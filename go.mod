@@ -3,6 +3,7 @@ module gitee.com/csingo/ctool
 go 1.16
 
 require (
+	github.com/fatih/color v1.13.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/gomodule/redigo v1.8.5
 	github.com/nacos-group/nacos-sdk-go v1.0.9

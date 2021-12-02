@@ -58,7 +58,7 @@ type container struct {
 	labels    []string
 }
 
-var CommandContainer = &container{
+var commandContainer = &container{
 	instances: make(map[string]interface{}),
 	labels:    []string{},
 }

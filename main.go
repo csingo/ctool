@@ -9,9 +9,10 @@ import (
 func main() {
 	autoload.Init()
 
-	args := os.Args
+	if len(os.Args) <= 1 || os.Args[1] == "help" {
+		cCommand.Run("help::doc")
+	} else {
+		cCommand.Run(os.Args[1], os.Args[2:]...)
+	}
 
-	cCommand.Run(args[1], args[2:]...)
-
-	//cCommand.Run("tool::init")
 }
