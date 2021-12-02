@@ -93,7 +93,7 @@ func (i *ToolCommand) Init() {
 		}
 	}
 	// 安装 proto-gen-go
-	log.Println("install proto-gen-go ...")
+	log.Println("install protoc-gen-go ...")
 	cmd := exec.Command("go", "install", vars.Tool.ProtoGenGoPackage)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -101,6 +101,16 @@ func (i *ToolCommand) Init() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	// 安装 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+	log.Println("install protoc-gen-go-grpc ...")
+	cmd = exec.Command("go", "install", vars.Tool.ProtoGenGoGrpcPackage)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err = cmd.Run()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
 	defer func() {
 		f.Close()
 		zipReader.Close()

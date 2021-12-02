@@ -3,8 +3,9 @@ package vars
 import "gitee.com/csingo/ctool/config/typs"
 
 var Tool = &typs.ToolConf{
-	Version:           "v1.0.2",
-	ProtoGenGoPackage: "google.golang.org/protobuf/cmd/protoc-gen-go@v1.26.0",
+	Version:               "v1.0.2",
+	ProtoGenGoPackage:     "google.golang.org/protobuf/cmd/protoc-gen-go@v1.26.0",
+	ProtoGenGoGrpcPackage: "google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1.0",
 	ProtocDownload: &typs.ToolConf_ProtocAddr{
 		Win:   "https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-win64.zip",
 		Mac:   "https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-osx-x86_64.zip",
