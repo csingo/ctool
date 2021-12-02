@@ -1,7 +1,7 @@
 package autoload
 
 import (
-	AppService "gitee.com/csingo/ctool/app/service"
+	AppService "gitee.com/csingo/ctool/app/app/service"
 	"gitee.com/csingo/ctool/core/cServer"
 )
 

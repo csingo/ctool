@@ -201,6 +201,8 @@ func handleRpc(c *gin.Context) {
 	serviceInstance, err := cRpc.GetService(rpcApp, rpcService)
 	if err != nil {
 		c.String(http.StatusNotFound, err.Error())
+		c.Abort()
+		return
 	}
 
 	caller := reflect.ValueOf(serviceInstance).MethodByName(rpcMethod)
@@ -211,12 +213,16 @@ func handleRpc(c *gin.Context) {
 	jsonRes := jsonCall.Call([]reflect.Value{param})
 	if !jsonRes[0].IsNil() {
 		c.String(http.StatusInternalServerError, jsonRes[0].Interface().(error).Error())
+		c.Abort()
+		return
 	}
 
 	responseValues := caller.Call([]reflect.Value{reflect.ValueOf(c), param.Elem()})
 	if !responseValues[1].IsNil() {
 		err = responseValues[1].Interface().(error)
 		c.String(http.StatusInternalServerError, err.Error())
+		c.Abort()
+		return
 	}
 
 	c.JSON(http.StatusOK, responseValues[0].Interface())

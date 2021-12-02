@@ -3,7 +3,7 @@ package vars
 import "gitee.com/csingo/ctool/config/typs"
 
 var Tool = &typs.ToolConf{
-	Version:               "v0.0.26",
+	Version:               "v0.0.27",
 	ProtoGenGoPackage:     "google.golang.org/protobuf/cmd/protoc-gen-go@v1.27.1",
 	ProtoGenGoGrpcPackage: "google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1.0",
 	ProtocDownload: &typs.ToolConf_ProtocAddr{
@@ -15,6 +15,7 @@ var Tool = &typs.ToolConf{
 		"project::create": {
 			"/.gitignore.tpl",
 			"/Makefile.tpl",
+			"/app/.gitkeep.tpl",
 			"/autoload/.gitkeep.tpl",
 			"/autoload/command.go.tpl",
 			"/autoload/config.go.tpl",
@@ -90,12 +91,12 @@ var Tool = &typs.ToolConf{
 			"/server/main.go.tpl",
 		},
 		"app::create": {
-			"/app/.gitkeep.tpl",
-			"/app/command/.gitkeep.tpl",
-			"/app/controller/.gitkeep.tpl",
-			"/app/middleware/.gitkeep.tpl",
-			"/app/service/.gitkeep.tpl",
-			"/app/validator/.gitkeep.tpl",
+			"/app/app/.gitkeep.tpl",
+			"/app/app/command/.gitkeep.tpl",
+			"/app/app/controller/.gitkeep.tpl",
+			"/app/app/middleware/.gitkeep.tpl",
+			"/app/app/service/.gitkeep.tpl",
+			"/app/app/validator/.gitkeep.tpl",
 		},
 	},
 }

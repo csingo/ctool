@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"gitee.com/csingo/ctool/app/service"
+	"gitee.com/csingo/ctool/app/app/service"
 	"gitee.com/csingo/ctool/response"
 	"github.com/gin-gonic/gin"
 )

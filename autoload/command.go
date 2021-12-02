@@ -1,15 +1,15 @@
 package autoload
 
 import (
-	AppCommand "gitee.com/csingo/ctool/app/command"
+	"gitee.com/csingo/ctool/app/app/command"
 	"gitee.com/csingo/ctool/core/cServer"
 )
 
 func initCommand() {
-	cServer.Inject(&AppCommand.ProjectCommand{})
-	cServer.Inject(&AppCommand.AppCommand{})
-	cServer.Inject(&AppCommand.ToolCommand{})
-	cServer.Inject(&AppCommand.ConfigCommand{})
-	cServer.Inject(&AppCommand.HelpCommand{})
-	cServer.Inject(&AppCommand.SdkCommand{})
+	cServer.Inject(&command.ProjectCommand{})
+	cServer.Inject(&command.AppCommand{})
+	cServer.Inject(&command.ToolCommand{})
+	cServer.Inject(&command.ConfigCommand{})
+	cServer.Inject(&command.HelpCommand{})
+	cServer.Inject(&command.SdkCommand{})
 }

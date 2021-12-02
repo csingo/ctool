@@ -76,7 +76,10 @@ func (i *AppCommand) Create(name cCommand.Option) {
 			fileExt := path.Ext(filePath)
 			tempPath := strings.TrimPrefix(filePath, tplPath)
 			if cHelper.InArrayString(filepath.Clean(tempPath), files) && fileExt == ".tpl" {
+				tempPath = strings.TrimPrefix(tempPath, "/app")
+				tempPath = "/app" + tempPath
 				tempPath = strings.Replace(tempPath, "app", name.Value, 1)
+				tempPath = "/app" + tempPath
 				tempFilePath := filepath.Clean(dir + strings.TrimRight(tempPath, ".tpl"))
 				tempDir := filepath.Dir(tempFilePath)
 				err = os.MkdirAll(tempDir, 0755)
@@ -211,8 +214,8 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 	tplServiceFilePath := fmt.Sprintf("%s/base/app/service_http.pb.go.tpl", tplPath)
 	tplRpcFilePath := fmt.Sprintf("%s/base/app/service_rpc.pb.go.tpl", tplPath)
 	tplCallFilePath := fmt.Sprintf("%s/base/app/call.pb.go.tpl", tplPath)
-	tplAppServiceFilePath := fmt.Sprintf("%s/app/service/Service.go.tpl", tplPath)
-	tplAppServiceRpcFilePath := fmt.Sprintf("%s/app/service/Rpc.go.tpl", tplPath)
+	tplAppServiceFilePath := fmt.Sprintf("%s/app/app/service/Service.go.tpl", tplPath)
+	tplAppServiceRpcFilePath := fmt.Sprintf("%s/app/app/service/Rpc.go.tpl", tplPath)
 
 	serviceTplContent, err := ioutil.ReadFile(tplServiceFilePath)
 	if err != nil {
@@ -278,7 +281,7 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 
 	// 创建 service 文件
 	for _, service := range services {
-		appServiceFilePath := fmt.Sprintf("%s/%s/service/%s.go", dir, app.Value, service.Name)
+		appServiceFilePath := fmt.Sprintf("%s/app/%s/service/%s.go", dir, app.Value, service.Name)
 		if cHelper.IsExistsPath(appServiceFilePath) {
 			appServiceTplContent, err = ioutil.ReadFile(appServiceFilePath)
 			if err != nil {
@@ -383,7 +386,7 @@ func (i *AppCommand) Controller(app cCommand.Option, name cCommand.Option) {
 	// 获取模板路径
 	modcache := cHelper.GetGOENV("GOMODCACHE")
 	tplPath := filepath.Clean(modcache + "/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
-	tplFilePath := fmt.Sprintf("%s/app/controller/HomeController.go.tpl", tplPath)
+	tplFilePath := fmt.Sprintf("%s/app/app/controller/HomeController.go.tpl", tplPath)
 
 	// 读取文件
 	content, err := ioutil.ReadFile(tplFilePath)
@@ -396,7 +399,7 @@ func (i *AppCommand) Controller(app cCommand.Option, name cCommand.Option) {
 	contentStr = strings.ReplaceAll(contentStr, "##CONTROLLER##", name.Value)
 
 	// 写文件
-	targetFilePath := filepath.Clean(fmt.Sprintf("%s/%s/controller/%s.go", dir, app.Value, name.Value))
+	targetFilePath := filepath.Clean(fmt.Sprintf("%s/app/%s/controller/%s.go", dir, app.Value, name.Value))
 	if cHelper.IsExistsPath(targetFilePath) {
 		log.Fatalf("file is exists: %s", targetFilePath)
 	}
@@ -465,7 +468,7 @@ func (i *AppCommand) Command(app cCommand.Option, name cCommand.Option) {
 	// 获取模板路径
 	modcache := cHelper.GetGOENV("GOMODCACHE")
 	tplPath := filepath.Clean(modcache + "/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
-	tplFilePath := fmt.Sprintf("%s/app/command/TestCommand.go.tpl", tplPath)
+	tplFilePath := fmt.Sprintf("%s/app/app/command/TestCommand.go.tpl", tplPath)
 
 	// 读取文件
 	content, err := ioutil.ReadFile(tplFilePath)
@@ -479,7 +482,7 @@ func (i *AppCommand) Command(app cCommand.Option, name cCommand.Option) {
 	contentStr = strings.ReplaceAll(contentStr, "##COMMANDNAME##", strings.ToLower(name.Value))
 
 	// 写文件
-	targetFilePath := filepath.Clean(fmt.Sprintf("%s/%s/command/%s.go", dir, app.Value, name.Value))
+	targetFilePath := filepath.Clean(fmt.Sprintf("%s/app/%s/command/%s.go", dir, app.Value, name.Value))
 	if cHelper.IsExistsPath(targetFilePath) {
 		log.Fatalf("file is exists: %s", targetFilePath)
 	}
@@ -548,7 +551,7 @@ func (i *AppCommand) Middleware(app cCommand.Option, name cCommand.Option) {
 	// 获取模板路径
 	modcache := cHelper.GetGOENV("GOMODCACHE")
 	tplPath := filepath.Clean(modcache + "/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
-	tplFilePath := fmt.Sprintf("%s/app/middleware/TestMiddleware.go.tpl", tplPath)
+	tplFilePath := fmt.Sprintf("%s/app/app/middleware/TestMiddleware.go.tpl", tplPath)
 
 	// 读取文件
 	content, err := ioutil.ReadFile(tplFilePath)
@@ -561,7 +564,7 @@ func (i *AppCommand) Middleware(app cCommand.Option, name cCommand.Option) {
 	contentStr = strings.ReplaceAll(contentStr, "##MIDDLEWARE##", name.Value)
 
 	// 写文件
-	targetFilePath := filepath.Clean(fmt.Sprintf("%s/%s/middleware/%s.go", dir, app.Value, name.Value))
+	targetFilePath := filepath.Clean(fmt.Sprintf("%s/app/%s/middleware/%s.go", dir, app.Value, name.Value))
 	if cHelper.IsExistsPath(targetFilePath) {
 		log.Fatalf("file is exists: %s", targetFilePath)
 	}
@@ -610,4 +613,3 @@ func (i *AppCommand) Middleware(app cCommand.Option, name cCommand.Option) {
 
 func (i *AppCommand) Orm(app cCommand.Option, name cCommand.Option) {}
 
-func (i *AppCommand) Sdk(sdk cCommand.Option, protoPath cCommand.Option) {}
