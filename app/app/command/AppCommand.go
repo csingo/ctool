@@ -247,7 +247,7 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 			var subContentByte = rpcTplContent
 			var subContent string
 			subContent = string(subContentByte)
-			subContent = strings.ReplaceAll(subContent, "##APP##", app.Name)
+			subContent = strings.ReplaceAll(subContent, "##APP##", app.Value)
 			subContent = strings.ReplaceAll(subContent, "##SERVICE##", service.Name)
 			subContent = strings.ReplaceAll(subContent, "##RPC##", rpc.Name)
 			subContent = strings.ReplaceAll(subContent, "##REQ##", rpc.Req)
