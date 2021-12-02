@@ -33,6 +33,7 @@ func (i *SdkCommand) Help() *cCommand.CommandHelpDoc {
 
 func (i *SdkCommand) Create(app cCommand.Option, protoPath cCommand.Option) {
 	var services = []protoService{}
+	log.Printf("%+V", app)
 
 	// 获取创建项目的路径
 	dir, err := os.Getwd()
@@ -155,7 +156,7 @@ func (i *SdkCommand) Create(app cCommand.Option, protoPath cCommand.Option) {
 			var subContentByte = rpcTplContent
 			var subContent string
 			subContent = string(subContentByte)
-			subContent = strings.ReplaceAll(subContent, "##APP##", app.Name)
+			subContent = strings.ReplaceAll(subContent, "##APP##", app.Value)
 			subContent = strings.ReplaceAll(subContent, "##SERVICE##", service.Name)
 			subContent = strings.ReplaceAll(subContent, "##RPC##", rpc.Name)
 			subContent = strings.ReplaceAll(subContent, "##REQ##", rpc.Req)
