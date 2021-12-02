@@ -77,7 +77,6 @@ func (i *AppCommand) Create(name cCommand.Option) {
 			tempPath := strings.TrimPrefix(filePath, tplPath)
 			if cHelper.InArrayString(filepath.Clean(tempPath), files) && fileExt == ".tpl" {
 				tempPath = strings.TrimPrefix(tempPath, "/app")
-				tempPath = "/app" + tempPath
 				tempPath = strings.Replace(tempPath, "app", name.Value, 1)
 				tempPath = "/app" + tempPath
 				tempFilePath := filepath.Clean(dir + strings.TrimRight(tempPath, ".tpl"))
