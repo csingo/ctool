@@ -344,7 +344,7 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportService", fmt.Sprintf("    //TODO:ImportService\n   \"%s/core/cServer\"", project))
 	}
 	if !strings.Contains(autoloadContentStr, importName) {
-		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportService", fmt.Sprintf("    //TODO:ImportService\n   %s \"%s/%s/service\"", importName, project, app.Value))
+		autoloadContentStr = strings.ReplaceAll(autoloadContentStr, "    //TODO:ImportService", fmt.Sprintf("    //TODO:ImportService\n   %s \"%s/app/%s/service\"", importName, project, app.Value))
 	}
 	for _, service := range services {
 		var serviceName = fmt.Sprintf("%s.%s", importName, service.Name)
