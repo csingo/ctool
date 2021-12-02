@@ -42,7 +42,7 @@ func (i *AppCommand) Help() *cCommand.CommandHelpDoc {
 		OptionDesc: []cCommand.OptionDesc{
 			{Name: "app", Desc: "应用"},
 			{Name: "name", Desc: "名称"},
-			{Name: "protoPath", Desc: "proto目录"},
+			{Name: "protoPath", Desc: "proto目录, 完整路径"},
 		},
 	}
 }
@@ -194,7 +194,6 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//log.Printf("%+v", services)
 
 	// 执行 protoc
 	// protoc --go_out=base/test --go-grpc_out=base/test -I D:\\Qdtech\\projects\\application-services\\ctool\\proto\\app enum.proto error.proto
@@ -234,7 +233,7 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 
 	// 生成 httprpc server 和 http client
 	for _, service := range services {
-		servicePbFilePath := fmt.Sprintf("%s/base/%s/%s_http.pb.go", dir, app.Value, service.Name)
+		servicePbFilePath := fmt.Sprintf("%s/base/%s/%s_%s_%s_http.pb.go", dir, app.Value, project, app.Value, service.Name)
 
 		var contentByte = serviceTplContent
 		var content string
@@ -246,6 +245,7 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 			var subContentByte = rpcTplContent
 			var subContent string
 			subContent = string(subContentByte)
+			subContent = strings.ReplaceAll(subContent, "##APP##", app.Name)
 			subContent = strings.ReplaceAll(subContent, "##SERVICE##", service.Name)
 			subContent = strings.ReplaceAll(subContent, "##RPC##", rpc.Name)
 			subContent = strings.ReplaceAll(subContent, "##REQ##", rpc.Req)

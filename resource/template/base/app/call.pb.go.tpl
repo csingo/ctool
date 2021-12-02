@@ -6,7 +6,7 @@ import (
 	"##PROJECT##/core/cHTTPClient"
 )
 
-func call(ctx context.Context, host, method string, req interface{}, rsp interface{}) (err error) {
+func call(ctx context.Context, host, app, service, method string, req interface{}, rsp interface{}) (err error) {
 	data, err := json.Marshal(req)
 	if err != nil {
 		return
@@ -19,8 +19,8 @@ func call(ctx context.Context, host, method string, req interface{}, rsp interfa
 		Method: cHTTPClient.MethodPOST,
 		Headers: map[string]string{
 			"Content-Type": "application/json",
-			"Rpc-App":      "app",
-			"Rpc-Service":  "HelloService",
+			"Rpc-App":      app,
+			"Rpc-Service":  service,
 			"Rpc-Method":   method,
 		},
 		Query: nil,

@@ -23,7 +23,7 @@ func (s *HelloServiceHttpClient) RegisterServerHost(host string) {
 var HelloService = &HelloServiceHttpClient{}
 
 func (s *HelloServiceHttpClient) Say(ctx context.Context, req *SayRequest) (rsp *SayReply, err error) {
-	err = call(ctx, s.host, req, rsp)
+	err = call(ctx, s.host, "app", "HelloService", "Say", req, rsp)
 	if err != nil {
 		return
 	}

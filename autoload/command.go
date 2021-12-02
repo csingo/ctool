@@ -11,4 +11,5 @@ func initCommand() {
 	cServer.Inject(&AppCommand.ToolCommand{})
 	cServer.Inject(&AppCommand.ConfigCommand{})
 	cServer.Inject(&AppCommand.HelpCommand{})
+	cServer.Inject(&AppCommand.SdkCommand{})
 }

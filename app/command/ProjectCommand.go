@@ -102,6 +102,7 @@ func (i *ProjectCommand) Create(name cCommand.Option) {
 func shell(commands []string) error {
 
 	for _, command := range commands {
+		log.Println(command)
 		commandArr := strings.Split(command, " ")
 		cmd := exec.Command(commandArr[0], commandArr[1:]...)
 		cmd.Stdout = os.Stdout
