@@ -43,8 +43,8 @@ func (i *ProjectCommand) Create(name cCommand.Option) {
 	}
 
 	// 获取模板路径
-	gopath := cHelper.EnvToString("GOPATH", "")
-	tplPath := filepath.Clean(gopath + "/pkg/mod/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
+	modcache := cHelper.GetGOENV("GOMODCACHE")
+	tplPath := filepath.Clean(modcache + "/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
 
 	// 遍历文件夹复制文件
 	err = filepath.Walk(tplPath, func(filePath string, info fs.FileInfo, err error) error {
@@ -90,17 +90,16 @@ func (i *ProjectCommand) Create(name cCommand.Option) {
 		log.Fatal(err)
 	}
 
-	err = shell()
+	err = shell([]string{
+		"go mod init "+name.Value,
+		"go mod tidy",
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func shell() error {
-	commands := []string{
-		"go mod init cxy",
-		"go mod tidy",
-	}
+func shell(commands []string) error {
 
 	for _, command := range commands {
 		commandArr := strings.Split(command, " ")

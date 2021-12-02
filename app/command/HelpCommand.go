@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gitee.com/csingo/ctool/core/cCommand"
 	"github.com/fatih/color"
+	"sort"
 )
 
 type HelpCommand struct{}
@@ -28,9 +29,19 @@ func (i *HelpCommand) Help() *cCommand.CommandHelpDoc {
 
 func (i *HelpCommand) Doc() {
 	var docs []commandHelpDoc
+	var names []string
 	instances := cCommand.GetAllCommand()
-	for _, commandInterface := range instances {
+
+	// 排序
+	for name, _ := range instances {
+		names = append(names, name)
+	}
+
+	sort.Strings(names)
+
+	for _, name := range names {
 		var optionMap = make(map[string]string)
+		commandInterface := instances[name]
 		commandDoc := commandInterface.Help()
 		commandName := commandDoc.CommandDesc.Name
 		commandDesc := commandDoc.CommandDesc.Desc

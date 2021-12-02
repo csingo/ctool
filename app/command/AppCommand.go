@@ -62,8 +62,8 @@ func (i *AppCommand) Create(name cCommand.Option) {
 	}
 
 	// 获取模板路径
-	gopath := cHelper.EnvToString("GOPATH", "")
-	tplPath := filepath.Clean(gopath + "/pkg/mod/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
+	modcache := cHelper.GetGOENV("GOMODCACHE")
+	tplPath := filepath.Clean(modcache + "/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
 
 	// 遍历文件夹复制文件
 	err = filepath.Walk(tplPath, func(filePath string, info fs.FileInfo, err error) error {
@@ -207,8 +207,8 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 	}
 
 	// 获取模板路径
-	gopath := cHelper.EnvToString("GOPATH", "")
-	tplPath := filepath.Clean(gopath + "/pkg/mod/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
+	modcache := cHelper.GetGOENV("GOMODCACHE")
+	tplPath := filepath.Clean(modcache + "/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
 	tplServiceFilePath := fmt.Sprintf("%s/base/app/service_http.pb.go.tpl", tplPath)
 	tplRpcFilePath := fmt.Sprintf("%s/base/app/service_rpc.pb.go.tpl", tplPath)
 	tplCallFilePath := fmt.Sprintf("%s/base/app/call.pb.go.tpl", tplPath)
@@ -381,8 +381,8 @@ func (i *AppCommand) Controller(app cCommand.Option, name cCommand.Option) {
 	project := strings.Trim(strings.Trim(modArr[0], "module"), " ")
 
 	// 获取模板路径
-	gopath := cHelper.EnvToString("GOPATH", "")
-	tplPath := filepath.Clean(gopath + "/pkg/mod/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
+	modcache := cHelper.GetGOENV("GOMODCACHE")
+	tplPath := filepath.Clean(modcache + "/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
 	tplFilePath := fmt.Sprintf("%s/app/controller/HomeController.go.tpl", tplPath)
 
 	// 读取文件
@@ -463,8 +463,8 @@ func (i *AppCommand) Command(app cCommand.Option, name cCommand.Option) {
 	project := strings.Trim(strings.Trim(modArr[0], "module"), " ")
 
 	// 获取模板路径
-	gopath := cHelper.EnvToString("GOPATH", "")
-	tplPath := filepath.Clean(gopath + "/pkg/mod/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
+	modcache := cHelper.GetGOENV("GOMODCACHE")
+	tplPath := filepath.Clean(modcache + "/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
 	tplFilePath := fmt.Sprintf("%s/app/command/TestCommand.go.tpl", tplPath)
 
 	// 读取文件
@@ -546,8 +546,8 @@ func (i *AppCommand) Middleware(app cCommand.Option, name cCommand.Option) {
 	project := strings.Trim(strings.Trim(modArr[0], "module"), " ")
 
 	// 获取模板路径
-	gopath := cHelper.EnvToString("GOPATH", "")
-	tplPath := filepath.Clean(gopath + "/pkg/mod/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
+	modcache := cHelper.GetGOENV("GOMODCACHE")
+	tplPath := filepath.Clean(modcache + "/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
 	tplFilePath := fmt.Sprintf("%s/app/middleware/TestMiddleware.go.tpl", tplPath)
 
 	// 读取文件

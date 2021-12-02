@@ -34,10 +34,10 @@ func (i *ToolCommand) Init() {
 		log.Fatalln(err)
 	}
 	// GOPATH
-	gopath := cHelper.EnvToString("GOPATH", "")
+	gopath := cHelper.GetGOENV("GOPATH")
+	envOS := cHelper.GetGOENV("GOOS")
 	// 下载 protoc
 	downloadFile := filepath.Clean(fmt.Sprintf("%s/%s", thisPath, "protoc.zip"))
-	envOS := cHelper.EnvToString("GOOS", "windows")
 	var downloadUrl string
 	var protofile string
 	switch envOS {
@@ -54,7 +54,7 @@ func (i *ToolCommand) Init() {
 	log.Println("download protoc.zip ...", downloadFile)
 	downloadRsp, err := http.Get(downloadUrl)
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	f, err := os.Create(downloadFile)
 	if err != nil {
@@ -66,13 +66,13 @@ func (i *ToolCommand) Init() {
 	}
 
 	// 解压 protoc
-	log.Println("unzip protoc.zip ...", protofile)
+	log.Println("unzip protoc.zip ...", downloadFile)
 	zipReader, err := zip.OpenReader(downloadFile)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	for _, zf := range zipReader.File {
-		if zf.Name == "bin/protoc.exe" {
+		if zf.Name == "bin/protoc.exe" || zf.Name == "bin/protoc" {
 			inFile, err := zf.Open()
 			if err != nil {
 				log.Fatalln(err)

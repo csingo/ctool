@@ -1,6 +1,10 @@
 package cHelper
 
-import "os"
+import (
+	"os"
+	"os/exec"
+	"strings"
+)
 
 func EnvToInt(name string, value int) int {
 	env := os.Getenv(name)
@@ -27,4 +31,17 @@ func EnvToString(name string, value string) string {
 	}
 
 	return env
+}
+
+func GetGOENV(name string) string {
+	cmd := exec.Command("go", "env", name)
+	env, _ := cmd.Output()
+	cmd.Run()
+
+	res := string(env)
+
+	res = strings.Trim(res, "\r")
+	res = strings.Trim(res, "\n")
+
+	return res
 }

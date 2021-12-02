@@ -48,8 +48,8 @@ func (i *ConfigCommand) Create(name cCommand.Option) {
 	project := strings.Trim(strings.Trim(modArr[0], "module"), " ")
 
 	// 获取模板路径
-	gopath := cHelper.EnvToString("GOPATH", "")
-	tplPath := filepath.Clean(gopath + "/pkg/mod/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
+	modcache := cHelper.GetGOENV("GOMODCACHE")
+	tplPath := filepath.Clean(modcache + "/gitee.com/csingo/ctool@" + vars.Tool.Version + "/resource/template")
 	tplAutoloadConfigFilePath := fmt.Sprintf("%s/autoload/config.go.tpl", tplPath)
 	tplConfigTypFilePath := fmt.Sprintf("%s/config/typs/TestConf.go.tpl", tplPath)
 	tplConfigVarFilePath := fmt.Sprintf("%s/config/vars/TestConf.go.tpl", tplPath)
