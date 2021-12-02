@@ -20,4 +20,4 @@ func (s *##SERVICE##HttpClient) RegisterServerHost(host string) {
 	s.host = host
 }
 
-var ##SERVICE## = ##SERVICE##HttpClient{}
+var ##SERVICE## = &##SERVICE##HttpClient{}
