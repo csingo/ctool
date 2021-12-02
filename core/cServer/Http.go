@@ -61,6 +61,7 @@ func StartHTTP() {
 		maxHeaderBytes = 20
 	}
 
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 	router.Use(gin.Recovery())
 
