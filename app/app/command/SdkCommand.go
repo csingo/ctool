@@ -217,6 +217,9 @@ func (i *SdkCommand) Create(app cCommand.Option, protoPath cCommand.Option) {
 		})
 
 		for _, importPackage := range service.Packages {
+			if importPackage == fmt.Sprintf("%s/base/%s", project, app.Value) {
+				continue
+			}
 			content = cHelper.ReplaceAllFromMap(content, map[string]string{
 				"//TODO:Import": fmt.Sprintf("%s\n\t\"%s\"", "//TODO:Import", importPackage),
 			})

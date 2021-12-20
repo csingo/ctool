@@ -301,6 +301,9 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 		})
 
 		for _, importPackage := range service.Packages {
+			if importPackage == fmt.Sprintf("%s/base/%s", project, app.Value) {
+				continue
+			}
 			content = cHelper.ReplaceAllFromMap(content, map[string]string{
 				"//TODO:Import": fmt.Sprintf("%s\n\t\"%s\"", "//TODO:Import", importPackage),
 			})
@@ -355,6 +358,9 @@ func (i *AppCommand) Service(app cCommand.Option, protoPath cCommand.Option) {
 		})
 
 		for _, importPackage := range service.Packages {
+			if strings.Contains(appServiceContent, fmt.Sprintf("\"%s\"", importPackage)) {
+				continue
+			}
 			appServiceContent = cHelper.ReplaceAllFromMap(appServiceContent, map[string]string{
 				"//TODO:Import": fmt.Sprintf("%s\n\t\"%s\"", "//TODO:Import", importPackage),
 			})
