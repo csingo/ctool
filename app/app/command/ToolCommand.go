@@ -141,13 +141,13 @@ func (i *ToolCommand) Update() {
 	switch goos {
 	case "windows":
 		ctoolFilePath = fmt.Sprintf("%s/%s", gopath, "bin/ctool.exe")
-		ctoolDownloadUrl = "https://gitee.com/csingo/ctool/raw/master/bin/win-ctool.exe"
+		ctoolDownloadUrl = "https://github.com/csingo/ctool/raw/master/bin/win-ctool.exe"
 	case "linux":
 		ctoolFilePath = fmt.Sprintf("%s/%s", gopath, "bin/ctool")
-		ctoolDownloadUrl = "https://gitee.com/csingo/ctool/raw/master/bin/linux-ctool"
+		ctoolDownloadUrl = "https://github.com/csingo/ctool/raw/master/bin/linux-ctool"
 	case "darwin":
 		ctoolFilePath = fmt.Sprintf("%s/%s", gopath, "bin/ctool")
-		ctoolDownloadUrl = "https://gitee.com/csingo/ctool/raw/master/bin/linux-ctool"
+		ctoolDownloadUrl = "https://github.com/csingo/ctool/raw/master/bin/linux-ctool"
 	}
 
 	// 删除工具
