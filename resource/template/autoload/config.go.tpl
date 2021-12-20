@@ -14,5 +14,6 @@ func initConfig() {
 	cServer.Inject(vars.Redis)
 	cServer.Inject(vars.Route)
 	cServer.Inject(vars.Server)
-	cServer.Inject(vars.RpcConf)
+	cServer.Inject(vars.Rpc)
+	cServer.Inject(vars.Log)
 }

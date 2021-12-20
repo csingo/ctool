@@ -14,5 +14,6 @@ import (
 // TraceLevel
 
 var Log = &typs.LogConf{
-	Level: cHelper.EnvToInt("Log_LEVEL", 7),
+	Level:  cHelper.EnvToInt("Log_LEVEL", 7),
+	Output: cHelper.EnvToString("Log_OUTPUT", "/dev/stdout"),
 }

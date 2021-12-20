@@ -2,28 +2,37 @@ package cLog
 
 import (
 	"gitee.com/csingo/ctool/core/cConfig"
-	"os"
-
 	"github.com/sirupsen/logrus"
+	"os"
 )
 
 var log = logrus.New()
 
 func Load() {
+	// 读取日志级别
+	level, err := cConfig.GetConf("LogConf.Level")
+	if err != nil {
+		level = 7
+	}
+	// 读取日志路径
+	output, err := cConfig.GetConf("LogConf.Output")
+	if err != nil {
+		output = "/dev/stdout"
+	}
+
 	// 设置将日志输出到标准输出
-	log.SetOutput(os.Stdout)
+	f, err := os.OpenFile(output.(string), os.O_CREATE|os.O_APPEND|os.O_RDWR, 0644)
+	if err != nil {
+		f = os.Stdout
+	}
+	log.SetOutput(f)
+	// 设置日志级别
+	log.SetLevel(logrus.Level(uint32(level.(int))))
 	// 设置日志格式为json格式和时间格式
 	log.SetFormatter(&logrus.JSONFormatter{
 		TimestampFormat: "2006-01-02 15:04:05",
 		DataKey:         "context",
 	})
-	// 设置日志级别
-	level, err := cConfig.GetConf("LogConf.Level")
-	if err != nil {
-		level = 7
-	}
-	log.SetLevel(logrus.Level(uint32(level.(int))))
-
 }
 
 func Trace(msg string, parmas map[string]interface{}) {

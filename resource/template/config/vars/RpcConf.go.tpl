@@ -4,7 +4,7 @@ import (
 	"##PROJECT##/config/typs"
 )
 
-var RpcConf = &typs.RpcConf{
+var Rpc = &typs.RpcConf{
 	ServiceHosts: []*typs.RpcConf_ServieHost{
 	},
 }

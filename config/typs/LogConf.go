@@ -1,7 +1,8 @@
 package typs
 
 type LogConf struct {
-	Level int
+	Level  int    `json:"level"`
+	Output string `json:"output"`
 }
 
 func (i *LogConf) ConfigName() string {
