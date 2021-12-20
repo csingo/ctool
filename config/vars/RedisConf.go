@@ -1,8 +1,8 @@
 package vars
 
 import (
-	"gitee.com/csingo/ctool/config/typs"
-	"gitee.com/csingo/ctool/core/cHelper"
+	"github.com/csingo/ctool/config/typs"
+	"github.com/csingo/ctool/core/cHelper"
 )
 
 var Redis = &typs.RedisConf{

@@ -3,9 +3,9 @@ package command
 import (
 	"archive/zip"
 	"fmt"
-	"gitee.com/csingo/ctool/config/vars"
-	"gitee.com/csingo/ctool/core/cCommand"
-	"gitee.com/csingo/ctool/core/cHelper"
+	"github.com/csingo/ctool/config/vars"
+	"github.com/csingo/ctool/core/cCommand"
+	"github.com/csingo/ctool/core/cHelper"
 	"io"
 	"log"
 	"net/http"
@@ -141,13 +141,13 @@ func (i *ToolCommand) Update() {
 	switch goos {
 	case "windows":
 		ctoolFilePath = fmt.Sprintf("%s/%s", gopath, "bin/ctool.exe")
-		ctoolDownloadUrl = "https://gitee.com/csingo/ctool/raw/v1.0.0/bin/win-ctool.exe"
+		ctoolDownloadUrl = "https://github.com/csingo/ctool/raw/v1.0.0/bin/win-ctool.exe"
 	case "linux":
 		ctoolFilePath = fmt.Sprintf("%s/%s", gopath, "bin/ctool")
-		ctoolDownloadUrl = "https://gitee.com/csingo/ctool/raw/v1.0.0/bin/linux-ctool"
+		ctoolDownloadUrl = "https://github.com/csingo/ctool/raw/v1.0.0/bin/linux-ctool"
 	case "darwin":
 		ctoolFilePath = fmt.Sprintf("%s/%s", gopath, "bin/ctool")
-		ctoolDownloadUrl = "https://gitee.com/csingo/ctool/attach_files/910941/download/linux-ctool"
+		ctoolDownloadUrl = "https://github.com/csingo/ctool/attach_files/910941/download/linux-ctool"
 	}
 
 	// 删除工具
