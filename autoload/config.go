@@ -1,8 +1,8 @@
 package autoload
 
 import (
-	"github.com/csingo/ctool/config/vars"
-	"github.com/csingo/ctool/core/cServer"
+	"gitee.com/csingo/ctool/config/vars"
+	"gitee.com/csingo/ctool/core/cServer"
 )
 
 func initConfig() {

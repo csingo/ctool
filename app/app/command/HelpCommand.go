@@ -2,7 +2,7 @@ package command
 
 import (
 	"fmt"
-	"github.com/csingo/ctool/core/cCommand"
+	"gitee.com/csingo/ctool/core/cCommand"
 	"github.com/fatih/color"
 	"sort"
 )

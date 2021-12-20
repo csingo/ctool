@@ -1,8 +1,8 @@
 package conn
 
 import (
-	"github.com/csingo/ctool/config/vars"
-	"github.com/csingo/ctool/core/cHelper"
+	"gitee.com/csingo/ctool/config/vars"
+	"gitee.com/csingo/ctool/core/cHelper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

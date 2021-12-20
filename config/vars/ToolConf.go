@@ -1,6 +1,6 @@
 package vars
 
-import "github.com/csingo/ctool/config/typs"
+import "gitee.com/csingo/ctool/config/typs"
 
 var Tool = &typs.ToolConf{
 	Version:               "v1.0.1",

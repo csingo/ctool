@@ -1,8 +1,8 @@
 package vars
 
 import (
-	"github.com/csingo/ctool/config/typs"
-	"github.com/csingo/ctool/core/cHelper"
+	"gitee.com/csingo/ctool/config/typs"
+	"gitee.com/csingo/ctool/core/cHelper"
 )
 
 var ConfigCenter = &typs.ConfigCenterConf{

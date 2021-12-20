@@ -1,7 +1,7 @@
 package cLog
 
 import (
-	"github.com/csingo/ctool/core/cConfig"
+	"gitee.com/csingo/ctool/core/cConfig"
 	"os"
 
 	"github.com/sirupsen/logrus"

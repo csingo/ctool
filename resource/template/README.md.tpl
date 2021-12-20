@@ -36,7 +36,7 @@ project                 项目目录
 2. 设置环境变量，PATH=PATH:$GOAPTH/bin
 3. 安装框架代码生成工具
 ```
-go install github.com/csingo/ctool@v1.0.5
+go install gitee.com/csingo/ctool@v1.0.5
 ```
 4. 使用代码生成工具创建项目
 

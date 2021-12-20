@@ -1,6 +1,6 @@
 package vars
 
-import "github.com/csingo/ctool/config/typs"
+import "gitee.com/csingo/ctool/config/typs"
 
 var Command = &typs.CommandConf{
 	Enable: true,

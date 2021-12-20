@@ -2,7 +2,7 @@ package cHelper
 
 import (
 	"fmt"
-	"github.com/csingo/ctool/core/cHelper/constants/randomType"
+	"gitee.com/csingo/ctool/core/cHelper/constants/randomType"
 	"math/rand"
 	"strconv"
 	"strings"

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/csingo/ctool/autoload"
-	"github.com/csingo/ctool/core/cCommand"
+	"gitee.com/csingo/ctool/autoload"
+	"gitee.com/csingo/ctool/core/cCommand"
 	"os"
 )
 

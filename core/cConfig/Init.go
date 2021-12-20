@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/csingo/ctool/core/cHelper"
+	"gitee.com/csingo/ctool/core/cHelper"
 )
 
 // Inject 注入配置

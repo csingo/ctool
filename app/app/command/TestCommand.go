@@ -1,7 +1,7 @@
 package command
 
 import (
-	"github.com/csingo/ctool/core/cCommand"
+	"gitee.com/csingo/ctool/core/cCommand"
 	"log"
 )
 

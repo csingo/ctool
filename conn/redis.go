@@ -2,7 +2,7 @@ package conn
 
 import (
 	"fmt"
-	"github.com/csingo/ctool/config/vars"
+	"gitee.com/csingo/ctool/config/vars"
 	"github.com/gomodule/redigo/redis"
 )
 
