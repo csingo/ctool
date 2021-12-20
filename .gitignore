@@ -1,0 +1,6 @@
+/git/
+/.idea/
+/cache/
+/log/
+
+/bin/*

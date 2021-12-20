@@ -1,0 +1,30 @@
+syntax = "proto3";
+option go_package = "./;test";
+
+service HelloService {
+  rpc SayA(SayRequest) returns (SayReply) {}
+  rpc SayB(SayRequest) returns (SayReply) {}
+  rpc SayC(SayRequest) returns (SayReply) {}
+}
+
+service ByeService {
+  rpc B(BRequest) returns (BReply);
+}
+
+message SayRequest {
+  string name = 1;
+  int64 age = 2;
+}
+
+message SayReply {
+  string content = 1;
+}
+
+message BRequest {
+  string name = 1;
+  int64 age = 2;
+}
+
+message BReply {
+  string content = 1;
+}
