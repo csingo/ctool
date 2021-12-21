@@ -150,15 +150,16 @@ func (i *ToolCommand) Update() {
 		ctoolDownloadUrl = "https://github.com/csingo/ctool/raw/master/bin/mac-ctool"
 	}
 
-	// 删除工具
-	err = os.Remove(ctoolFilePath)
+	// 下载工具
+	log.Println("download ctool ...", ctoolDownloadUrl)
+	downloadRsp, err := http.Get(ctoolDownloadUrl)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	// 下载工具
-	log.Println("download ctool ...", ctoolDownloadUrl)
-	downloadRsp, err := http.Get(ctoolDownloadUrl)
+	// 删除工具
+	log.Println("uninstall ctool ...", ctoolFilePath)
+	err = os.Remove(ctoolFilePath)
 	if err != nil {
 		log.Fatalln(err)
 	}
