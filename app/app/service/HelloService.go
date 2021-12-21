@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"gitee.com/csingo/ctool/base/app"
+	"github.com/csingo/ctool/base/app"
 	"log"
 )
 

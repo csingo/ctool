@@ -6,11 +6,11 @@ import (
 	"reflect"
 	"syscall"
 
-	"gitee.com/csingo/ctool/core/cCommand"
-	"gitee.com/csingo/ctool/core/cConfig"
-	"gitee.com/csingo/ctool/core/cLog"
-	"gitee.com/csingo/ctool/core/cMiddleware"
-	"gitee.com/csingo/ctool/core/cRpc"
+	"github.com/csingo/ctool/core/cCommand"
+	"github.com/csingo/ctool/core/cConfig"
+	"github.com/csingo/ctool/core/cLog"
+	"github.com/csingo/ctool/core/cMiddleware"
+	"github.com/csingo/ctool/core/cRpc"
 )
 
 // Inject 注入实体

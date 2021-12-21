@@ -2,9 +2,9 @@ package command
 
 import (
 	"fmt"
-	"gitee.com/csingo/ctool/core/cCommand"
-	"gitee.com/csingo/ctool/core/cHelper"
-	"gitee.com/csingo/ctool/resource/asset"
+	"github.com/csingo/ctool/core/cCommand"
+	"github.com/csingo/ctool/core/cHelper"
+	"github.com/csingo/ctool/resource/asset"
 	"io/ioutil"
 	"log"
 	"os"

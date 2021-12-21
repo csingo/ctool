@@ -1,12 +1,12 @@
 package vars
 
 import (
-	"gitee.com/csingo/ctool/config/typs"
-	"gitee.com/csingo/ctool/core/cHelper"
+	"github.com/csingo/ctool/config/typs"
+	"github.com/csingo/ctool/core/cHelper"
 )
 
 var Server = &typs.ServerConf{
-	GoMod: "gitee.com/csingo/ctool",
+	GoMod: "github.com/csingo/ctool",
 	HttpServer: &typs.ServerConf_HttpServer{
 		Enable:         cHelper.EnvToBool("HTTP_SERVER_ENABLE", true),
 		Port:           cHelper.EnvToInt("HTTP_SERVER_PORT", 8080),

@@ -1,4 +1,4 @@
-module gitee.com/csingo/ctool
+module github.com/csingo/ctool
 
 go 1.16
 

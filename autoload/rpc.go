@@ -1,6 +1,6 @@
 package autoload
 
-import "gitee.com/csingo/ctool/config/vars"
+import "github.com/csingo/ctool/config/vars"
 
 func initRpcClient() {
 	for _, service := range vars.RpcConf.ServiceHosts {
