@@ -147,7 +147,7 @@ func (i *ToolCommand) Update() {
 		ctoolDownloadUrl = "https://github.com/csingo/ctool/raw/master/bin/linux-ctool"
 	case "darwin":
 		ctoolFilePath = fmt.Sprintf("%s/%s", gopath, "bin/ctool")
-		ctoolDownloadUrl = "https://github.com/csingo/ctool/raw/master/bin/linux-ctool"
+		ctoolDownloadUrl = "https://github.com/csingo/ctool/raw/master/bin/mac-ctool"
 	}
 
 	// 删除工具
