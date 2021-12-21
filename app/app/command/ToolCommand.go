@@ -174,6 +174,8 @@ func (i *ToolCommand) Update() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	// 授权
+	log.Println("chmod ctool ...", ctoolFilePath)
 	err = os.Chmod(ctoolFilePath, 0755)
 	if err != nil {
 		log.Fatalln(err)
