@@ -178,3 +178,4 @@ func (i *ToolCommand) Update() {
 		log.Fatalln(err)
 	}
 }
+
